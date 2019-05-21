@@ -20,10 +20,8 @@ set(forth_math_srcs
     )
 
 set(forth_rendering_srcs
-    rendering/CrossSection.cpp
     rendering/CrossSection.h
-    rendering/Frustum.cpp
-    rendering/Frustum.h
+    rendering/CrossSection.cpp
     rendering/Projector4.h
     rendering/Visualizer4.h
 )

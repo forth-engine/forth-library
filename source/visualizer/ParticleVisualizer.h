@@ -34,14 +34,6 @@ namespace Forth
 			buff->AddVert(buffer[0].ToVec3());
 		}
 
-		/// <summary>
-		/// Per-simplex visualize method
-		/// </summary>
-		void Render(const VertexProfile buffer[], int count) override
-		{
-			buff->AddProfile(buffer[0]);
-		}
-
 	};
 
 }

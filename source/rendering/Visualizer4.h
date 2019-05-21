@@ -23,11 +23,6 @@ namespace Forth
 		virtual void Render(const Vector4 buffer[], int count) = 0;
 
 		/// <summary>
-		/// Per-simplex visualize method
-		/// </summary>
-		virtual void Render(const VertexProfile buffer[], int count) = 0;
-
-		/// <summary>
 		/// Marks the end of the visualizing function
 		/// </summary>
 		virtual void End()

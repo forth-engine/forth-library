@@ -39,17 +39,6 @@ namespace Forth
 		}
 
 		/// <summary>
-		/// Per-simplex visualize method
-		/// </summary>
-		void Render(const VertexProfile buffer[], int count) override
-		{
-			for (int i = 0; i < count; i++)
-			{
-				buff->AddProfile(buffer[i]);
-			}
-		}
-
-		/// <summary>
 		/// Marks the end of the visualizing function
 		/// </summary>
 		void End() override
@@ -67,7 +56,7 @@ namespace Forth
 
 			Vector3 median = GetAverage(v);
 
-			for (int i = 0; i < t.size(); i += 3)
+			for (size_t i = 0; i < t.size(); i += 3)
 			{
 				int a = t[i], b = t[i + 1], c = t[i + 2];
 				Vector3 &va = v[a];

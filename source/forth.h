@@ -7,7 +7,6 @@
 #include "common/Buffer4.h"
 #include "math/Transform4.h"
 #include "rendering/CrossSection.h"
-#include "rendering/Frustum.h"
 #include "visualizer/SolidVisualizer.h"
 #include "visualizer/WireVisualizer.h"
 #include "visualizer/ParticleVisualizer.h"
@@ -22,7 +21,6 @@
 namespace Forth {
 
 	CrossSection* crossSection;
-	Frustum* frustum;
 	std::vector<Buffer3*>* buffers;
 	SolidVisualizer* solidViz;
 	WireVisualizer* wireViz;
@@ -33,7 +31,6 @@ namespace Forth {
 		if (crossSection == NULL)
 		{
 			crossSection = new CrossSection();
-			frustum = new Frustum();
 			solidViz = new SolidVisualizer();
 			wireViz = new WireVisualizer();
 			particleViz = new ParticleVisualizer();
@@ -41,7 +38,6 @@ namespace Forth {
 		}
 
 		crossSection->Setup(view);
-		frustum->Setup(view);
 	}
 
 	DLLEXPORT void DoCleanup()
@@ -53,7 +49,6 @@ namespace Forth {
 				delete (*buffers)[i];
 			}
 			delete crossSection;
-			delete frustum;
 			delete solidViz;
 			delete wireViz;
 			delete particleViz;
@@ -100,30 +95,6 @@ namespace Forth {
 		return out;
 	}
 
-	DLLEXPORT Buffer3* DoFrustum(Buffer4 *in, Buffer3 *out, Transform4 matrix, VisualizeMode mode)
-	{
-		if (frustum == NULL)
-			return 0;
-
-		Visualizer4 *viz;
-
-		HotInit(mode, &out, &viz);
-
-		viz->Initialize(*out);
-
-		frustum->Project(*in, matrix, viz);
-
-		viz->End();
-
-		return out;
-	}
-
-	DLLEXPORT void UpdateFrustumParams(Frustum::frustumparams params)
-	{
-		if (frustum != NULL)
-			frustum->Set(params);
-	}
-
 	DLLEXPORT void DisposeBuffer(Buffer3 *buff)
 	{
 		if (buff == NULL)
@@ -147,11 +118,7 @@ namespace Forth {
 		*indices = &buff->indices[0];
 		*vertCount = buff->vertices.size();
 		*indiceCount = buff->indices.size();
-		if (&buff->profiles)
-		{
-			*profiles = &buff->profiles[0];
-			*profilesCount = buff->profiles.size();
-		}
+
 		return buff->simplex;
 	}
 }

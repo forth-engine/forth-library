@@ -12,7 +12,6 @@ namespace Forth
 	{
 		std::vector<Vector3> vertices;
 		std::vector<int> indices;
-		std::vector<VertexProfile> profiles;
 
 		Buffer3() { }
 
@@ -25,7 +24,6 @@ namespace Forth
 		{
 			vertices.clear();
 			indices.clear();
-			profiles.clear();
 		}
 
 		void AddVert(const Vector3 &v)
@@ -50,11 +48,6 @@ namespace Forth
 			indices.push_back(a);
 			indices.push_back(b);
 			indices.push_back(c);
-		}
-
-		void AddProfile(const VertexProfile &p)
-		{
-			profiles.push_back(p);
 		}
 
 		Forth::SimplexMode simplex;
