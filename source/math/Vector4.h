@@ -23,7 +23,7 @@ namespace Forth
 		/// <summary>
 		/// create empty vector.
 		/// </summary>
-		Vector4() { }
+		Vector4() : x(0), y(0), z(0), w(0) { }
 
 		/// <summary>
 		/// Create uniform vector.
@@ -42,6 +42,9 @@ namespace Forth
 		/// Create new vector with given individual values.
 		/// </summary>
 		Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) { }
+
+		Vector4(float *arr) : x(arr[0]), y(arr[1]), z(arr[2]), w(arr[3]) { }
+
 
 		/// <summary>
 		/// Get an axis value of specified index.
@@ -72,20 +75,22 @@ namespace Forth
 			x = y = z = w = a;
 		}
 
-		void operator+=(const Vector4& rhs)
+		Vector4& operator+=(const Vector4& rhs)
 		{
 			x += rhs.x;
 			y += rhs.y;
 			z += rhs.z;
 			w += rhs.w;
+			return *this;
 		}
 
-		void operator-=(const Vector4& rhs)
+		Vector4& operator-=(const Vector4& rhs)
 		{
 			x -= rhs.x;
 			y -= rhs.y;
 			z -= rhs.z;
 			w -= rhs.w;
+			return *this;
 		}
 
 		Vector4& operator*=(float f)
@@ -94,6 +99,7 @@ namespace Forth
 			y *= f;
 			z *= f;
 			w *= f;
+			return *this;
 		}
 
 		Vector4& operator/=(float f)
@@ -103,6 +109,7 @@ namespace Forth
 			y *= f;
 			z *= f;
 			w *= f;
+			return *this;
 		}
 
 		/// <summary>

@@ -1,9 +1,9 @@
-#pragma once
 
 #include "CrossSection.h"
 
 namespace Forth
 {
+
 void CrossSection::InternalProject1(const Buffer4 &source, Visualizer4 *dest)
 {
 	int *t4 = source.indices;
@@ -76,7 +76,6 @@ void CrossSection::InternalProject3(const Buffer4 &source, Visualizer4 *dest)
 		dest->Render(_temp, iter);
 	}
 }
-
 void CrossSection::Project(const Buffer4 &source, const Transform4 &transform, Visualizer4 *dest)
 {
 	viewmodel = view * transform;

@@ -17,6 +17,7 @@ add_executable(
 target_link_libraries(
 	demo
 	freeglut_static
+	forth_static
 	${ADDITIONAL_LIBRARIES}
 	${OPENGL_LIBRARIES}
 )

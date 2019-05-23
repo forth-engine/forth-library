@@ -1,6 +1,7 @@
 
 set(forth_common_srcs
     common/Buffer3.h
+    common/Buffer4.cpp
     common/Buffer4.h
     common/Color.h
     common/Enums.h
@@ -20,8 +21,8 @@ set(forth_math_srcs
     )
 
 set(forth_rendering_srcs
-    rendering/CrossSection.h
     rendering/CrossSection.cpp
+    rendering/CrossSection.h
     rendering/Projector4.h
     rendering/Visualizer4.h
 )

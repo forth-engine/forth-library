@@ -12,15 +12,16 @@ namespace Forth
 		Vector3() { }
 		Vector3(float xyz) : x(xyz), y(xyz), z(xyz) { }
 		Vector3(float x, float y, float z) : x(x), y(y), z(z) { }
+		Vector3(float *arr) : x(arr[0]), y(arr[1]), z(arr[2]) { }
 
 		float& operator[](int i)
 		{
-			(&x)[i];
+			return (&x)[i];
 		}
 
 		float operator[](int i) const
 		{
-			(&x)[i];
+			return (&x)[i];
 		}
 
 		void Set(float _x, float _y, float _z)
@@ -35,18 +36,20 @@ namespace Forth
 			x = y = z = a;
 		}
 
-		void operator+=(const Vector3& rhs)
+		Vector3& operator+=(const Vector3& rhs)
 		{
 			x += rhs.x;
 			y += rhs.y;
 			z += rhs.z;
+			return *this;
 		}
 
-		void operator-=(const Vector3& rhs)
+		Vector3& operator-=(const Vector3& rhs)
 		{
 			x -= rhs.x;
 			y -= rhs.y;
 			z -= rhs.z;
+			return *this;
 		}
 
 		Vector3& operator*=(float f)
@@ -54,6 +57,7 @@ namespace Forth
 			x *= f;
 			y *= f;
 			z *= f;
+			return *this;
 		}
 
 		Vector3& operator/=(float f)
@@ -62,6 +66,7 @@ namespace Forth
 			x *= f;
 			y *= f;
 			z *= f;
+			return *this;
 		}
 
 		const Vector3 operator-(void) const

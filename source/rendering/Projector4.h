@@ -14,7 +14,6 @@ namespace Forth
 	class Projector4
 	{
 	public:
-		Projector4() { }
 
 		/// <summary>
 		/// Called by the viewer to initialize the projction
