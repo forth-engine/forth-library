@@ -35,6 +35,7 @@ set(forth_visualizer_srcs
 )
 
 add_library(forth_static
+    ../include/forth.h
     forth.h
     ${forth_common_srcs}
     ${forth_math_srcs}

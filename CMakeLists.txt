@@ -12,7 +12,4 @@ set(forth_version 0.1)
 
 add_subdirectory(source)
 
-find_package(OpenGL REQUIRED)
-add_subdirectory(freeglut)
-add_subdirectory(tests)
 
