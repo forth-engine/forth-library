@@ -24,9 +24,9 @@ class CrossSection : public Projector4
 	void InternalProject3(const Buffer4 &source, Visualizer4 *dest);
 
   public:
-	CrossSection() { }
+	CrossSection(void);
 
-	~CrossSection()
+	~CrossSection(void)
 	{
 		sides.clear();
 	}

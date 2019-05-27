@@ -4,6 +4,10 @@
 namespace Forth
 {
 
+CrossSection::CrossSection(void) {
+	Setup(Forth::Transform4::identity());
+}
+
 void CrossSection::InternalProject1(const Buffer4 &source, Visualizer4 *dest)
 {
 	int *t4 = source.indices;

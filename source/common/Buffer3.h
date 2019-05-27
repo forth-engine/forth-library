@@ -12,8 +12,9 @@ namespace Forth
 	{
 		std::vector<Vector3> vertices;
 		std::vector<int> indices;
+		Forth::SimplexMode simplex;
 
-		Buffer3() { }
+		Buffer3() { simplex = SM_Triangle; }
 
 		~Buffer3()
 		{
@@ -30,7 +31,6 @@ namespace Forth
 		{
 			vertices.push_back(v);
 		}
-
 
 		void AddTris(const int a)
 		{
@@ -50,6 +50,5 @@ namespace Forth
 			indices.push_back(c);
 		}
 
-		Forth::SimplexMode simplex;
 	};
 }

@@ -3,6 +3,7 @@ set(forth_common_srcs
     common/Buffer3.h
     common/Buffer4.cpp
     common/Buffer4.h
+    common/BufferGL.h
     common/Color.h
     common/Enums.h
     common/VertexProfile.h
@@ -12,6 +13,7 @@ set(forth_math_srcs
     math/Bounds4.h
     math/Euler4.h
     math/Math.h
+    math/Matrix4.cpp
     math/Matrix4.h
     math/Plane4.h
     math/SphereBounds4.h
@@ -30,6 +32,7 @@ set(forth_rendering_srcs
 set(forth_visualizer_srcs
     visualizer/CustomVisualizer.h
     visualizer/ParticleVisualizer.h
+    visualizer/SolidVisualizer.cpp
     visualizer/SolidVisualizer.h
     visualizer/WireVisualizer.h
 )
