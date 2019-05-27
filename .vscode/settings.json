@@ -8,5 +8,6 @@
         "-DCMAKE_CXX_COMPILER:STRING=C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/Hostx86/x64/cl.exe",
         "-DCMAKE_C_COMPILER:STRING=C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/Hostx86/x64/cl.exe",
     ],
-	"cmake.generator": "Visual Studio 15 2017"
+	"cmake.generator": "Visual Studio 15 2017",
+	"C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, BreakBeforeBraces: Allman, AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, TabWidth: 4, NamespaceIndentation: All, AllowAllParametersOfDeclarationOnNextLine: true }"
 }
