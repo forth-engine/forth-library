@@ -11,7 +11,7 @@ namespace Forth
 	struct BufferGL
 	{
 		// Layout: 0-2 Position. 3-5 Normal
-		std::vector<float> vertexbuffer;
+		std::vector<float> vb;
 
 		BufferGL() {}
 
@@ -22,7 +22,7 @@ namespace Forth
 
 		void Clear()
 		{
-			vertexbuffer.clear();
+			vb.clear();
 		}
 
 		void Copy(const Buffer3 &v)
@@ -49,7 +49,7 @@ namespace Forth
 				};
 				// clang-format on
 
-				vertexbuffer.insert(vertexbuffer.end(), arr, arr + 18);
+				vb.insert(vb.end(), arr, arr + 18);
 			}
 		}
 	};

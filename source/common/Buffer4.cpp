@@ -3,14 +3,14 @@
 
 namespace Forth
 {
-	inline void Buffer4::EnsureIndices(const int incoming)
+	void Buffer4::EnsureIndices(const int incoming)
 	{
 		if (indiceCount + incoming > indiceCap)
 		{
 			Expand(&indices, indiceCount, indiceCap = Max(indiceCount + incoming, indiceCap << 1));
 		}
 	}
-	inline void Buffer4::EnsureVertices(const int incoming)
+	void Buffer4::EnsureVertices(const int incoming)
 	{
 		if (verticeCount + incoming > verticeCap)
 		{
@@ -18,48 +18,48 @@ namespace Forth
 		}
 	}
 
-	inline void Buffer4::Clear()
+	void Buffer4::Clear()
 	{
 		verticeCount = indiceCount = offset = 0;
 	}
 
-	inline void Buffer4::Clean()
+	void Buffer4::Clean()
 	{
 		Clear();
 		indices = new int[indiceCap = 4];
 		vertices = new Vector4[verticeCap = 4];
 	}
 
-	inline Buffer4::Buffer4()
+	Buffer4::Buffer4()
 	{
 		Clean();
 	}
 
-	inline void Buffer4::Align() { offset = verticeCount; }
+	void Buffer4::Align() { offset = verticeCount; }
 
-	inline void Buffer4::Align(int snapshot) { offset = snapshot; }
+	void Buffer4::Align(int snapshot) { offset = snapshot; }
 
 	/// <summary>
 	/// Send copy of current buffer position to be reused later.
 	/// </summary>
 	/// <seealso cref="Align(int)"/>
 
-	inline int Buffer4::Snapshot() { return verticeCount; }
+	int Buffer4::Snapshot() { return verticeCount; }
 
-	inline void Buffer4::AddSimplex(int i)
+	void Buffer4::AddSimplex(int i)
 	{
 		EnsureIndices(1);
 		indices[indiceCount++] = (i + offset);
 	}
 
-	inline void Buffer4::AddSimplex(int i, int j)
+	void Buffer4::AddSimplex(int i, int j)
 	{
 		EnsureIndices(2);
 		indices[indiceCount++] = (i + offset);
 		indices[indiceCount++] = (j + offset);
 	}
 
-	inline void Buffer4::AddSimplex(int i, int j, int k)
+	void Buffer4::AddSimplex(int i, int j, int k)
 	{
 		EnsureIndices(3);
 		indices[indiceCount++] = (i + offset);
@@ -67,7 +67,7 @@ namespace Forth
 		indices[indiceCount++] = (k + offset);
 	}
 
-	inline void Buffer4::AddSimplex(int i, int j, int k, int l)
+	void Buffer4::AddSimplex(int i, int j, int k, int l)
 	{
 		EnsureIndices(2);
 		indices[indiceCount++] = (i + offset);
@@ -76,7 +76,7 @@ namespace Forth
 		indices[indiceCount++] = (l + offset);
 	}
 
-	inline void Buffer4::AddPoint(int v0)
+	void Buffer4::AddPoint(int v0)
 	{
 		switch (simplex)
 		{
@@ -86,7 +86,7 @@ namespace Forth
 		}
 	}
 
-	inline void Buffer4::AddSegment(int v0, int v1)
+	void Buffer4::AddSegment(int v0, int v1)
 	{
 		switch (simplex)
 		{
@@ -99,7 +99,7 @@ namespace Forth
 		}
 	}
 
-	inline void Buffer4::AddTriangle(int v0, int v1, int v2)
+	void Buffer4::AddTriangle(int v0, int v1, int v2)
 	{
 		switch (simplex)
 		{
@@ -117,7 +117,7 @@ namespace Forth
 		}
 	}
 
-	inline void Buffer4::AddQuad(int v0, int v1, int v2, int v3)
+	void Buffer4::AddQuad(int v0, int v1, int v2, int v3)
 	{
 		switch (simplex)
 		{
@@ -137,7 +137,7 @@ namespace Forth
 		}
 	}
 
-	inline void Buffer4::AddTrimid(int v0, int v1, int v2, int v3)
+	void Buffer4::AddTrimid(int v0, int v1, int v2, int v3)
 	{
 		switch (simplex)
 		{
@@ -165,7 +165,7 @@ namespace Forth
 		}
 	}
 
-	inline void Buffer4::AddPyramid(int v0, int v1, int v2, int v3, int v4)
+	void Buffer4::AddPyramid(int v0, int v1, int v2, int v3, int v4)
 	{
 		switch (simplex)
 		{
@@ -196,7 +196,7 @@ namespace Forth
 		}
 	}
 
-	inline void Buffer4::AddPrism(int v0, int v1, int v2, int v3, int v4, int v5)
+	void Buffer4::AddPrism(int v0, int v1, int v2, int v3, int v4, int v5)
 	{
 		switch (simplex)
 		{
@@ -230,7 +230,7 @@ namespace Forth
 		}
 	}
 
-	inline void Buffer4::AddCube(int v0, int v1, int v2, int v3, int v4, int v5, int v6, int v7)
+	void Buffer4::AddCube(int v0, int v1, int v2, int v3, int v4, int v5, int v6, int v7)
 	{
 		switch (simplex)
 		{
@@ -271,21 +271,21 @@ namespace Forth
 		}
 	}
 
-	inline int Buffer4::AddVertex(int idx)
+	int Buffer4::AddVertex(int idx)
 	{
 		EnsureVertices(1);
 		vertices[verticeCount] = (vertices[idx + offset]);
 		return verticeCount++ - offset;
 	}
 
-	inline int Buffer4::AddVertex(Vector4 vert)
+	int Buffer4::AddVertex(Vector4 vert)
 	{
 		EnsureVertices(1);
 		vertices[verticeCount] = vert;
 		return verticeCount++ - offset;
 	}
 
-	inline void Buffer4::Sequence(SequenceMode mode, int start, int count)
+	void Buffer4::Sequence(SequenceMode mode, int start, int count)
 	{
 		offset += start;
 		int end = count < 0 ? verticeCount - offset : count;
@@ -384,13 +384,13 @@ namespace Forth
 		offset -= start;
 	}
 
-	inline int Buffer4::SequenceIndex(int i, int j, int k, int l)
+	int Buffer4::SequenceIndex(int i, int j, int k, int l)
 	{
 		return l + _seqW * (k + _seqZ * (j + _seqY * i));
 	}
 
 	template <typename T>
-	inline void Buffer4::Expand(T **arr, int count, int newSize)
+	void Buffer4::Expand(T **arr, int count, int newSize)
 	{
 		T *newArr = new T[newSize];
 

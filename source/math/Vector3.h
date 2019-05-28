@@ -9,7 +9,7 @@ namespace Forth
 	{
 		float x, y, z;
 
-		Vector3() { }
+		Vector3() : x(0), y(0), z(0) { }
 		Vector3(float xyz) : x(xyz), y(xyz), z(xyz) { }
 		Vector3(float x, float y, float z) : x(x), y(y), z(z) { }
 		Vector3(float *arr) : x(arr[0]), y(arr[1]), z(arr[2]) { }

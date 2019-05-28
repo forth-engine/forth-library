@@ -25,6 +25,8 @@ set(forth_math_srcs
 set(forth_rendering_srcs
     rendering/CrossSection.cpp
     rendering/CrossSection.h
+    rendering/Model4.h
+    rendering/Projector4.cpp
     rendering/Projector4.h
     rendering/Visualizer4.h
 )

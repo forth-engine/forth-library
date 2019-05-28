@@ -247,5 +247,5 @@ namespace Forth
     /// Convert given degree rotation in given axis to orthogonal matrix rotation.
     /// </summary>
     /// <remarks>This method is much optimized than Euler(new Euler4(axis, degree))</remarks>
-	inline Matrix4 Euler(int axis, float degree);
+	Matrix4 Euler(int axis, float degree);
 }

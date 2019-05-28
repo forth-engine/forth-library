@@ -4,7 +4,8 @@
 namespace Forth
 {
 
-CrossSection::CrossSection(void) {
+CrossSection::CrossSection(void) : Projector4() {
+
 	Setup(Forth::Transform4::identity());
 }
 
@@ -92,11 +93,6 @@ void CrossSection::Project(const Buffer4 &source, const Transform4 &transform, V
 			sides.push_back(Dot(vmw, source.vertices[i]) > vmwp);
 	}
 
-	//if (source.profileCount == source.indiceCount)
-	{
-
-	}
-	//else
 	{
 		switch (source.simplex)
 		{

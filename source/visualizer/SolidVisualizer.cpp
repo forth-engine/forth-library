@@ -2,16 +2,16 @@
 
 namespace Forth {
 
-	inline SolidVisualizer::SolidVisualizer() {}
+	SolidVisualizer::SolidVisualizer() {}
 
-	inline void SolidVisualizer::Initialize(Buffer3 & buffer)
+	void SolidVisualizer::Initialize(Buffer3 & buffer)
 	{
 		buff = &buffer;
 		buff->Clear();
 		buff->simplex = SimplexMode::SM_Triangle;
 	}
 
-	inline void SolidVisualizer::Render(const Vector4 * buffer, int count)
+	void SolidVisualizer::Render(const Vector4 * buffer, int count)
 	{
 		Buffer3 &b = *buff;
 		int o = (int)b.vertices.size();
@@ -24,12 +24,12 @@ namespace Forth {
 		}
 	}
 
-	inline void SolidVisualizer::End()
+	void SolidVisualizer::End()
 	{
 		RefineTriangleOrder();
 	}
 
-	inline void SolidVisualizer::RefineTriangleOrder()
+	void SolidVisualizer::RefineTriangleOrder()
 	{
 		std::vector<int> &t = buff->indices;
 		std::vector<Vector3> &v = buff->vertices;
@@ -50,9 +50,9 @@ namespace Forth {
 		}
 	}
 
-	inline Vector3 SolidVisualizer::GetAverage(const std::vector<Vector3>& v)
+	Vector3 SolidVisualizer::GetAverage(const std::vector<Vector3>& v)
 	{
-		Vector3 median;
+		Vector3 median = Vector3();
 		size_t size = v.size();
 		for (size_t i = size; i-- > 0;)
 			median += v[i];
