@@ -2,6 +2,7 @@
 
 #include "../math/Vector3.h"
 #include "../common/Color.h"
+#include "../extras/Utils.h"
 #include "VertexProfile.h"
 #include "Enums.h"
 #include <vector>
@@ -10,44 +11,49 @@ namespace Forth
 {
 	struct Buffer3
 	{
-		std::vector<Vector3> vertices;
-		std::vector<int> indices;
+		FORTH_ARRAY(vertices, Vector3);
+		FORTH_ARRAY(indices, int);
 		Forth::SimplexMode simplex;
 
 		Buffer3() { simplex = SM_Triangle; }
 
 		~Buffer3(void)
 		{
-			Clear();
+			delete[] vertices;
+			delete[] indices;
 		}
 
 		void Clear(void)
 		{
-			vertices.clear();
-			indices.clear();
+			vertices_count = 0;
+			indices_count = 0;
 		}
 
 		void AddVert(const Vector3 &v)
 		{
-			vertices.push_back(v);
+			EnsureCapacity(&vertices, vertices_count, &vertices_cap, vertices_count + 1);
+			vertices[vertices_count++] = v;
 		}
 
 		void AddTris(const int a)
 		{
-			indices.push_back(a);
+			EnsureCapacity(&indices, indices_count, &indices_cap, indices_count + 1);
+			indices[indices_count++] = a;
 		}
 
 		void AddTris(const int a, const int b)
 		{
-			indices.push_back(a);
-			indices.push_back(b);
+			EnsureCapacity(&indices, indices_count, &indices_cap, indices_count + 2);
+			indices[indices_count++] = a;
+			indices[indices_count++] = b;
 		}
 
 		void AddTris(const int a, const int b, const int c)
 		{
-			indices.push_back(a);
-			indices.push_back(b);
-			indices.push_back(c);
+			EnsureCapacity(&indices, indices_count, &indices_cap, indices_count + 3);
+			indices[indices_count++] = a;
+			indices[indices_count++] = b;
+			indices[indices_count++] = c;
 		}
 
 	};

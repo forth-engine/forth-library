@@ -12,6 +12,7 @@ set(forth_common_srcs
 set(forth_extras_srcs
     extras/MeshGen.h
     extras/MeshGen.cpp
+    extras/Utils.h
     )
 
 set(forth_math_srcs
@@ -33,6 +34,7 @@ set(forth_rendering_srcs
     rendering/Model4.h
     rendering/Projector4.cpp
     rendering/Projector4.h
+    rendering/Scene4.h
     rendering/Visualizer4.h
 )
 

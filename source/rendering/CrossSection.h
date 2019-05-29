@@ -2,6 +2,7 @@
 
 #include "../math/Transform4.h"
 #include "Projector4.h"
+#include "../extras/Utils.h"
 #include <vector>
 
 namespace Forth
@@ -10,7 +11,8 @@ namespace Forth
 	{
 
 		Transform4 view, viewmodel;
-		std::vector<bool> sides;
+		bool* sides = new bool[4];
+		int sides_cap = 4;
 		Vector4 _temp[4];
 		VertexProfile _temp2[4];
 
@@ -28,7 +30,7 @@ namespace Forth
 
 		~CrossSection(void)
 		{
-			sides.clear();
+			delete[] sides;
 		}
 
 		/// <summary>

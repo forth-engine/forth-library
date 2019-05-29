@@ -85,13 +85,14 @@ namespace Forth
 	void CrossSection::Project(const Buffer4 &source, const Transform4 &transform, Visualizer4 *dest)
 	{
 		viewmodel = view * transform;
-		sides.clear();
+
+		EnsureCapacity(&sides, 0, &sides_cap, source.verticeCount);
 		{
 			// faster than "sides[i] = viewmodel * source.vertices[i] > 0"
 			Vector4 &vmw = viewmodel.rotation.ew;
-			float vmwp = -viewmodel.position.w;
-			for (int i = 0; i < source.verticeCount; i++)
-				sides.push_back(Dot(vmw, source.vertices[i]) > vmwp);
+			float vmwp = viewmodel.position.w;
+			for (int i = 0; i < source.verticeCount; ++i)
+				sides[i] = (Dot(vmw, source.vertices[i]) < vmwp);
 		}
 
 		{

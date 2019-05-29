@@ -94,7 +94,7 @@ namespace Forth
 			return *this;
 		}
 
-		Vector4& operator*=(float f)
+		Vector4& operator*=(const float f)
 		{
 			x *= f;
 			y *= f;
@@ -148,7 +148,7 @@ namespace Forth
 		/// <summary>
 		/// Axis-wisely scale vector values with a number.
 		/// </summary>
-		const Vector4 operator*(float f) const
+		const Vector4 operator*(const float f) const
 		{
 			return Vector4(x * f, y * f, z * f, w * f);
 		}
@@ -233,7 +233,7 @@ namespace Forth
 	/// Interpolate two vector by T and clamp.
 	/// </summary>
 	/// <remarks> The interpolation is clamped between zero to one </remarks>
-	inline Vector4 Lerp(const Vector4& a, const Vector4& b, float t)
+	inline Vector4 Lerp(const Vector4& a, const Vector4& b, const float t)
 	{
 		return a + (b - a) * Clamp01(t);
 	}
@@ -242,7 +242,7 @@ namespace Forth
 	/// Interpolate two vector by T.
 	/// </summary>
 	/// <remarks> The interpolation is **not** clamped. </remarks>
-	inline Vector4 LerpUnclamped(const Vector4& a, const Vector4& b, float t)
+	inline Vector4 LerpUnclamped(const Vector4& a, const Vector4& b, const float t)
 	{
 		return a + (b - a) * t;
 	}

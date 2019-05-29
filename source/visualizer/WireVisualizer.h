@@ -30,7 +30,7 @@ namespace Forth
 		{
 			for (int i = 0; i < count; i++)
 			{
-				buff->AddTris((int)buff->vertices.size());
+				buff->AddTris(buff->vertices_count);
 				buff->AddVert(buffer[i].ToVec3());
 			}
 		}

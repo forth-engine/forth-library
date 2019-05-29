@@ -1,4 +1,3 @@
-#pragma once
 
 #include "Projector4.h"
 
@@ -21,8 +20,8 @@ namespace Forth
 
 	Projector4::~Projector4()
 	{
-		delete defaultVisualizers[SM_Point];
-		delete defaultVisualizers[SM_Line];
-		delete defaultVisualizers[SM_Triangle];
+		delete (ParticleVisualizer*)(defaultVisualizers[SM_Point]);
+		delete (WireVisualizer*)(defaultVisualizers[SM_Line]);
+		delete (SolidVisualizer*)(defaultVisualizers[SM_Triangle]);
 	}
 }

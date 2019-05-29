@@ -52,7 +52,7 @@ namespace Forth
 			return *this;
 		}
 
-		Vector3& operator*=(float f)
+		Vector3& operator*=(const float f)
 		{
 			x *= f;
 			y *= f;

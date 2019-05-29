@@ -18,12 +18,12 @@
 	do                                                                                                              \
 	{                                                                                                               \
 		glBindBuffer(GL_ARRAY_BUFFER, vb);                                                                          \
-		glBufferData(GL_ARRAY_BUFFER, model.driver.vb.size() * sizeof(float), &model.driver.vb[0], GL_STREAM_DRAW); \
+		glBufferData(GL_ARRAY_BUFFER, model.driver.vb_count * sizeof(float), &model.driver.vb[0], GL_STREAM_DRAW); \
 		glEnableVertexAttribArray(0);                                                                               \
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(0));                            \
 		glEnableVertexAttribArray(1);                                                                               \
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));            \
-		glDrawArrays(GL_TRIANGLES, 0, model.driver.vb.size() / 6);                                                  \
+		glDrawArrays(GL_TRIANGLES, 0, model.driver.vb_count / 6);                                                  \
 	} while (0)
 
 namespace Forth

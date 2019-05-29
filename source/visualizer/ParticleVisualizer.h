@@ -30,7 +30,7 @@ namespace Forth
 		// Because it's a segment, count is expected to be 2
 		void Render(const Vector4 *buffer, int count) override
 		{
-			buff->AddTris((int)buff->vertices.size());
+			buff->AddTris((int)buff->vertices_count);
 			buff->AddVert(buffer[0].ToVec3());
 		}
 
