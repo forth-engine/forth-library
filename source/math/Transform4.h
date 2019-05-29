@@ -22,7 +22,7 @@ namespace Forth
 		/// </summary>
 		Matrix4 rotation;
 
-		Transform4() { }
+		Transform4(void) : position(Vector4()), rotation(Matrix4()) { }
 
 		/// <summary>
 		/// Create a 4x5 matrix.

@@ -33,6 +33,7 @@ namespace Forth
 	Buffer4::Buffer4()
 	{
 		Clean();
+		simplex = SM_Tetrahedron;
 	}
 
 	void Buffer4::Align() { offset = verticeCount; }

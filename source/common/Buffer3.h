@@ -16,12 +16,12 @@ namespace Forth
 
 		Buffer3() { simplex = SM_Triangle; }
 
-		~Buffer3()
+		~Buffer3(void)
 		{
 			Clear();
 		}
 
-		void Clear()
+		void Clear(void)
 		{
 			vertices.clear();
 			indices.clear();

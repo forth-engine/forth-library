@@ -22,7 +22,7 @@ namespace Forth
 		/// <summary>
 		/// Create empty plane.
 		/// </summary>
-		Plane4() { }
+		Plane4(void) { }
 
 		/// <summary>
 		/// Create new plane with given normal at given point.

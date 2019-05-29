@@ -24,7 +24,7 @@ namespace Forth
 		/// <summary>
 		/// Create empty euler.
 		/// </summary>
-		Euler4() { }
+		Euler4(void) { }
 
 		/// <summary>
 		/// Create new euler with given individual values.

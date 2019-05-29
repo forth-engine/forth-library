@@ -14,7 +14,7 @@ namespace Forth
 	{
 		Vector4 min, max;
 
-		Bounds4() { }
+		Bounds4(void) { }
 		Bounds4(const Vector4& _extent) : min(-_extent), max(_extent) { }
 		Bounds4(const Vector4& _min, const Vector4& _max) : min(_min), max(_max) { }
 
@@ -106,7 +106,7 @@ namespace Forth
 			return tmax > tmin;
 		}
 
-		static Bounds4 infinite()
+		static Bounds4 infinite(void)
 		{
 			return Bounds4(Vector4(-INFINITY));
 		}

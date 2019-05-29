@@ -9,7 +9,7 @@ namespace Forth
 	{
 
 	public:
-		Visualizer4() { }
+		Visualizer4(void) { }
 
 		/// <summary>
 		/// Marks the beginning of the visualizing function
@@ -25,7 +25,7 @@ namespace Forth
 		/// <summary>
 		/// Marks the end of the visualizing function
 		/// </summary>
-		virtual void End()
+		virtual void End(void)
 		{
 			// 🤔?
 		};

@@ -33,7 +33,7 @@ namespace Forth
 		BufferGL driver = BufferGL();
 		Transform4 matrix;
 
-		Model4() : matrix(Transform4::identity()) {}
+		Model4(void) : matrix(Transform4::identity()) {}
 
 		void Render(Projector4 &projector)
 		{

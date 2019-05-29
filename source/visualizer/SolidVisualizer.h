@@ -7,7 +7,7 @@ namespace Forth
 	class SolidVisualizer : public Visualizer4
 	{
 	  public:
-		SolidVisualizer();
+		SolidVisualizer(void);
 
 		Buffer3 *buff;
 
@@ -25,12 +25,12 @@ namespace Forth
 		/// <summary>
 		/// Marks the end of the visualizing function
 		/// </summary>
-		void End() override;;
+		void End(void) override;
 
 		/// <summary>
 		/// Make normal consistent so we don't get trouble with shadows.
 		/// </summary>
-		void RefineTriangleOrder();
+		void RefineTriangleOrder(void);
 
 		Vector3 GetAverage(const std::vector<Vector3> &v);
 	};

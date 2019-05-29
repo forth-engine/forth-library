@@ -23,7 +23,7 @@ namespace Forth
 
 		Vector4 ex, ey, ez, ew;
 
-		Matrix4() { ex = Vector4(); ey = Vector4(); ez = Vector4(); ew = Vector4(); }
+		Matrix4(void) { ex = Vector4(); ey = Vector4(); ez = Vector4(); ew = Vector4(); }
 
 		Matrix4(const Vector4& _diag)
 		{
@@ -39,12 +39,12 @@ namespace Forth
 		Matrix4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p)
 			: ex(a, b, c, d), ey(e,f,g,h), ez(i,j,k,l), ew(m,n,o,p) { }
 
-		Vector4& operator[](int i)
+		inline Vector4& operator[](int i)
 		{
 			return (&ex)[i];
 		}
 
-		Vector4 operator[](int i) const
+		inline Vector4 operator[](int i) const
 		{
 			return (&ex)[i];
 		}
@@ -54,12 +54,12 @@ namespace Forth
 			return Vector4(ex[i], ey[i], ez[i], ew[i]);
 		}
 
-		const Vector4 Column0() const
+		const Vector4 Column0(void) const
 		{
 			return Vector4(ex.x, ey.x, ez.x, ew.x);
 		}
 
-		const Vector4 Column1() const
+		const Vector4 Column1(void) const
 		{
 			return Vector4(ex.y, ey.y, ez.y, ew.y);
 		}
@@ -154,7 +154,7 @@ namespace Forth
 		/// <summary>
 		/// Get a 4x4 identity matrix
 		/// </summary>
-		static Matrix4 identity()
+		static Matrix4 identity(void)
 		{
 			Matrix4 m = Matrix4();
 			m.ex.x = m.ey.y = m.ez.z = m.ew.w = 1;
@@ -163,7 +163,7 @@ namespace Forth
 
 	private:
 
-		void Transpose()
+		void Transpose(void)
 		{
 			float tmp;
 			SWAP(ex.y, ey.x, tmp);

@@ -13,14 +13,14 @@ namespace Forth
 		// Layout: 0-2 Position. 3-5 Normal
 		std::vector<float> vb;
 
-		BufferGL() {}
+		BufferGL(void) {}
 
-		~BufferGL()
+		~BufferGL(void)
 		{
 			Clear();
 		}
 
-		void Clear()
+		void Clear(void)
 		{
 			vb.clear();
 		}

@@ -9,7 +9,7 @@ namespace Forth
 
 	public:
 
-		ParticleVisualizer() { }
+		ParticleVisualizer(void) { }
 
 		Buffer3 *buff;
 

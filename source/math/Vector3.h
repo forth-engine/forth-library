@@ -14,12 +14,12 @@ namespace Forth
 		Vector3(float x, float y, float z) : x(x), y(y), z(z) { }
 		Vector3(float *arr) : x(arr[0]), y(arr[1]), z(arr[2]) { }
 
-		float& operator[](int i)
+		inline float& operator[](int i)
 		{
 			return (&x)[i];
 		}
 
-		float operator[](int i) const
+		inline float operator[](int i) const
 		{
 			return (&x)[i];
 		}

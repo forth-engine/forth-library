@@ -23,7 +23,7 @@ namespace Forth
 		/// <summary>
 		/// create empty vector.
 		/// </summary>
-		Vector4() : x(0), y(0), z(0), w(0) { }
+		Vector4(void) : x(0), y(0), z(0), w(0) { }
 
 		/// <summary>
 		/// Create uniform vector.
@@ -35,6 +35,7 @@ namespace Forth
 		/// </summary>
 		Vector4(int axis, float value)
 		{
+			x = y = z = w = 0;
 			(&x)[axis] = value;
 		}
 
@@ -49,7 +50,7 @@ namespace Forth
 		/// <summary>
 		/// Get an axis value of specified index.
 		/// </summary>
-		float operator[](int i) const
+		inline float operator[](int i) const
 		{
 			return (&x)[i];
 		}
@@ -57,7 +58,7 @@ namespace Forth
 		/// <summary>
 		/// Set an axis value of specified index.
 		/// </summary>
-		float& operator[](int i)
+		inline float& operator[](int i)
 		{
 			return (&x)[i];
 		}
@@ -185,7 +186,7 @@ namespace Forth
 		/// <summary>
 		/// Vector with values of one.
 		/// </summary>
-		static Vector4 one()
+		inline static Vector4 one(void)
 		{
 			return Vector4(1);
 		}

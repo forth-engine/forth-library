@@ -55,9 +55,9 @@ namespace Forth
 	  protected:
 		void *defaultVisualizers[3];
 
-		Projector4();
+		Projector4(void);
 
-		~Projector4();
+		~Projector4(void);
 
 	  public:
 	};

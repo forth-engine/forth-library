@@ -12,7 +12,7 @@ namespace Forth
 		Color color;
 		Vector4 uv, uv2, uv3;
 
-		VertexProfile() { }
+		VertexProfile(void) { }
 		VertexProfile(Forth::Color c) : color(c) { }
 		VertexProfile(Forth::Color c, Vector4 uv) : color(c), uv(uv) { }
 		VertexProfile(Forth::Color c, Vector4 uv, Vector4 uv2) : color(c), uv(uv), uv2(uv2) { }
@@ -22,7 +22,7 @@ namespace Forth
 		VertexProfile(Vector4 uv, Vector4 uv2) : uv(uv), uv2(uv2) { }
 		VertexProfile(Vector4 uv, Vector4 uv2, Vector4 uv3) : uv(uv), uv2(uv2), uv3(uv3) { }
 
-		static VertexProfile initial()
+		static VertexProfile initial(void)
 		{
 			return VertexProfile(Forth::Color(1, 1, 1, 1));
 		}
