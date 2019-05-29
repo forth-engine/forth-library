@@ -1,146 +1,196 @@
 #pragma once
 
-#include <cstring>
+#include "../math/Vector4.h"
 #include "Enums.h"
 #include "VertexProfile.h"
-#include "../math/Vector4.h"
+#include <cstdarg>
+#include <cstring>
+#include <vector>
 
 namespace Forth
 {
-///
-/// Temporary representation of 4D mesh
-///
-struct Buffer4
-{
-
-	Vector4 *vertices;
-	int *indices;
-
-	int verticeCount, indiceCount;
-	int verticeCap, indiceCap;
-	int offset = 0;
-
-	SimplexMode simplex;
-
-	template <typename T>
-	void Expand(T **arr, int count, int newSize);
-
-	void EnsureIndices(const int incoming);
-
-	void EnsureVertices(const int incoming);
-
-	bool IsEmpty() { return verticeCount == 0; }
-
-	void Clear();
-
 	///
-	/// Clear and Clean memory traces.
+	/// Temporary representation of 4D mesh
 	///
-	void Clean();
+	struct Buffer4
+	{
 
-	Buffer4();
+		Vector4 *vertices;
+		int *indices;
 
-	/// <summary>
-	/// Move buffer forward to the end.
-	/// </summary>
-	/// <remarks>
-	/// Align are handy if used together with bulk operations (e.g. <see cref="Buffer4Extension.Sequence(Buffer4, SequenceMode)"/>)
-	/// </remarks>
-	void Align();
+		int verticeCount, indiceCount;
+		int verticeCap, indiceCap;
+		int offset = 0;
 
-	/// <summary>
-	/// Move buffer toward the given snapshot.
-	/// </summary>
-	/// <remarks>
-	/// Use <see cref="Snapshot"/> to obtain snapshot at given position.
-	/// </remarks>
-	/// <seealso cref="Snapshot"/>
-	void Align(int snapshot);
+		SimplexMode simplex;
 
-	/// <summary>
-	/// Send copy of current buffer position to be reused later.
-	/// </summary>
-	/// <seealso cref="Align(int)"/>
-	int Snapshot();
+		template <typename T>
+		void Expand(T **arr, int count, int newSize);
 
-	void AddSimplex(int i);
+		void EnsureIndices(const int incoming);
 
-	void AddSimplex(int i, int j);
+		void EnsureVertices(const int incoming);
 
-	void AddSimplex(int i, int j, int k);
+		bool IsEmpty(void) { return verticeCount == 0; }
 
-	void AddSimplex(int i, int j, int k, int l);
+		void Clear(void);
 
-	/// <summary>
-	/// Add an artbitrary point.
-	/// </summary>
-	void AddPoint(int v0);
+		///
+		/// Clear and Clean memory traces.
+		///
+		void Clean(void);
 
-	/// <summary>
-	/// Add a segment. Order doesn't matter.
-	/// </summary>
-	void AddSegment(int v0, int v1);
+		Buffer4();
 
-	/// <summary>
-	/// Add a flat triangle. Order doesn't matter.
-	/// </summary>
-	void AddTriangle(int v0, int v1, int v2);
+		/// <summary>
+		/// Move buffer forward to the end.
+		/// </summary>
+		/// <remarks>
+		/// Align are handy if used together with bulk operations (e.g. <see cref="Buffer4Extension.Sequence(Buffer4, SequenceMode)"/>)
+		/// </remarks>
+		void Align(void);
 
-	/// <summary>
-	/// Add a flat quad. Must be either clockwise/counter-clockwise order.
-	/// </summary>
-	void AddQuad(int v0, int v1, int v2, int v3);
+		/// <summary>
+		/// Move buffer toward the given snapshot.
+		/// </summary>
+		/// <remarks>
+		/// Use <see cref="Snapshot"/> to obtain snapshot at given position.
+		/// </remarks>
+		/// <seealso cref="Snapshot"/>
+		void Align(int snapshot);
 
-	/// <summary>
-	/// Add a trimid (triangle pyramid) with given vert indexs. Order doesn't matter.
-	/// </summary>
-	void AddTrimid(int v0, int v1, int v2, int v3);
+		/// <summary>
+		/// Send copy of current buffer position to be reused later.
+		/// </summary>
+		/// <seealso cref="Align(int)"/>
+		int Snapshot(void);
 
-	/// <summary>
-	/// Helper to add a pyramid from 5 existing verts index.
-	/// A pyramid is constructed from 2 trimids, v0 is the tip, the rest is the base.
-	/// </summary>
-	void AddPyramid(int v0, int v1, int v2, int v3, int v4);
+		void AddSimplex(int i);
 
-	/// <summary>
-	/// Helper to add a triangular prism from 6 existing verts index.
-	/// A prism is constructed from 3 trimids, v0-v1-v2 must be parallel (and in the same order) with v3-v4-v5
-	/// </summary>
-	void AddPrism(int v0, int v1, int v2, int v3, int v4, int v5);
+		void AddSimplex(int i, int j);
 
-	/// <summary>
-	/// Helper to add a cube from 8 existing verts index.
-	/// A cube is constructed from 5 trimids, v0-v1-v2-v3 must be parallel (and in the same order) with v4-v5-v6-v7
-	/// </summary>
-	void AddCube(int v0, int v1, int v2, int v3, int v4, int v5, int v6, int v7);
+		void AddSimplex(int i, int j, int k);
 
-	/// <summary> Duplicate vertex and return the cloned index </summary>
-	/// <remarks> Useful for sequencing operations </remarks>
-	int AddVertex(int idx);
+		void AddSimplex(int i, int j, int k, int l);
 
-	/// <summary> Add a vertex with default profile and return the index </summary>
-	int AddVertex(Vector4 vert);
+		/// <summary>
+		/// Add an artbitrary point.
+		/// </summary>
+		void AddPoint(int v0);
 
-	//----------------------------------------------------------------------
+		void AddPoints(int v...) // recursive variadic function
+		{
+			va_list args;
+			va_start(args, v);
+			for (int i = 0; i < v; i++)
+			{
+				int a = va_arg(args, int);
+				AddPoint(a);
+			}
+			va_end(args);
+		}
 
-	/// <summary>
-	/// Automatically add vertices to indices buffer
-	/// since last Align() using given sequencing preset.
-	/// </summary>
-	void Sequence(SequenceMode mode, int start = 0, int count = -1);
+		/// <summary>
+		/// Add a segment. Order doesn't matter.
+		/// </summary>
+		void AddSegment(int v0, int v1);
 
-	int _seqW, _seqZ, _seqY; // _seqX,
+		/// <summary>
+		/// Add a flat triangle. Order doesn't matter.
+		/// </summary>
+		void AddTriangle(int v0, int v1, int v2);
 
-	int SequenceIndex(int i, int j, int k, int l);
+		/// <summary>
+		/// Add a flat quad. Must be either clockwise/counter-clockwise order.
+		/// </summary>
+		void AddQuad(int v0, int v1, int v2, int v3);
 
-	/// <summary>
-	/// Special sequencing tool when dealing with 1D, 2D, 3D or 4D grid vertices.
-	/// </summary>
-	/// <remarks>
-	/// Set the grid count in the parameter.
-	/// The nested order is for(x) => for(y) => for(z) => for(w).
-	/// the starting point is always from the last Align()
-	/// </remarks>
-	void SequenceGrid(int x, int y = 1, int z = 1, int w = 1);
-};
+		/// <summary>
+		/// Add a trimid (triangle pyramid) with given vert indexs. Order doesn't matter.
+		/// </summary>
+		void AddTrimid(int v0, int v1, int v2, int v3);
+
+		/// <summary>
+		/// Helper to add a pyramid from 5 existing verts index.
+		/// A pyramid is constructed from 2 trimids, v0 is the tip, the rest is the base.
+		/// </summary>
+		void AddPyramid(int v0, int v1, int v2, int v3, int v4);
+
+		/// <summary>
+		/// Helper to add a triangular prism from 6 existing verts index.
+		/// A prism is constructed from 3 trimids, v0-v1-v2 must be parallel (and in the same order) with v3-v4-v5
+		/// </summary>
+		void AddPrism(int v0, int v1, int v2, int v3, int v4, int v5);
+
+		/// <summary>
+		/// Helper to add a cube from 8 existing verts index.
+		/// A cube is constructed from 5 trimids, v0-v1-v2-v3 must be parallel (and in the same order) with v4-v5-v6-v7
+		/// </summary>
+		void AddCube(int v0, int v1, int v2, int v3, int v4, int v5, int v6, int v7);
+
+		/// <summary> Duplicate vertex and return the cloned index </summary>
+		/// <remarks> Useful for sequencing operations </remarks>
+		int AddVertex(int idx);
+
+		/// <summary> Add a vertex with default profile and return the index </summary>
+		int AddVertex(Vector4 vert);
+
+		//----------------------------------------------------------------------
+
+		/// <summary>
+		/// Automatically add vertices to indices buffer
+		/// since last Align() using given sequencing preset.
+		/// </summary>
+		void Sequence(SequenceMode mode, int start = 0, int count = -1);
+
+		int _seqW, _seqZ, _seqY; // _seqX,
+
+		int SequenceIndex(int i, int j, int k, int l);
+
+		/// <summary>
+		/// Special sequencing tool when dealing with 1D, 2D, 3D or 4D grid vertices.
+		/// </summary>
+		/// <remarks>
+		/// Set the grid count in the parameter.
+		/// The nested order is for(x) => for(y) => for(z) => for(w).
+		/// the starting point is always from the last Align()
+		/// </remarks>
+		void SequenceGrid(int x, int y = 1, int z = 1, int w = 1);
+
+		/// <summary>
+        /// Add by given sequence
+        /// </summary>
+        void AddBySequence(SequenceMode mode, const std::vector<int> &v);
+
+        /// <summary>
+        /// Add points.
+        /// </summary>
+        void AddPoint(const std::vector<int> &v);
+
+        /// <summary>
+        /// Add segments.
+        /// </summary>
+        void AddSegment(const std::vector<int> &v);
+
+        /// <summary>
+        /// Add triangles.
+        /// </summary>
+        void AddTriangle(const std::vector<int> &v);
+
+        /// <summary>
+        /// Add quads.
+        /// </summary>
+        void AddQuad(const std::vector<int> &v);
+
+        /// <summary>
+        /// Add trimids.
+        /// </summary>
+        void AddTrimid(const std::vector<int> &v);
+
+        /// <summary>
+        /// Add polygon points/wires/surfaces.
+        /// </summary>
+        void AddPolygon(const std::vector<int> &v);
+
+	};
 } // namespace Forth

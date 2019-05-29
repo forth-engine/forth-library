@@ -495,4 +495,144 @@ namespace Forth
 			break;
 		}
 	}
+
+	void Buffer4::AddBySequence(SequenceMode mode, const std::vector<int> &v)
+	{
+		// Copy of the original sequence
+		int va = v.size();
+		switch (mode)
+		{
+		case SQM_Points:
+			for (int i = 0; i < va;)
+				AddPoint(v[i++]);
+			break;
+
+		case SQM_Lines:
+			for (int i = 0; i < va;)
+				AddSegment(v[i++], v[i++]);
+			break;
+
+		case SQM_LineStrip:
+			for (int i = 1; i < va;)
+				AddSegment(v[i - 1], v[i++]);
+			break;
+
+		case SQM_LineFan:
+			for (int i = 1; i < va;)
+				AddSegment(v[0], v[i++]);
+			break;
+
+		case SQM_LineLoop:
+			for (int i = 0; i < va;)
+				AddSegment(v[i], (v[++i % va]));
+			break;
+
+		case SQM_Triangles:
+			for (int i = 0; i < va;)
+				AddTriangle(v[i++], v[i++], v[i++]);
+			break;
+
+		case SQM_TriangleStrip:
+			for (int i = 2; i < va;)
+				AddTriangle(v[i - 2], v[i - 1], v[i++]);
+			break;
+
+		case SQM_TriangleFan:
+			for (int i = 1; i < va;)
+				AddTriangle(v[0], v[i - 1], v[i++]);
+			break;
+
+		case SQM_Quads:
+			for (int i = 0; i < va;)
+				AddQuad(v[i++], v[i++], v[i++], v[i++]);
+			break;
+
+		case SQM_QuadStrip:
+			for (int i = 2; i < va; i += 2)
+				AddQuad(v[i - 2], v[i - 1], v[i + 1], v[i]);
+			break;
+
+		case SQM_Polygon:
+			for (int i = 1; i < va;)
+				AddTriangle(v[0], v[i], (v[++i % va]));
+			break;
+
+		case SQM_Trimids:
+			for (int i = 0; i < va;)
+				AddTrimid(v[i++], v[i++], v[i++], v[i++]);
+			break;
+
+		case SQM_TrimidStrip:
+			for (int i = 3; i < va;)
+				AddTrimid(v[i - 3], v[i - 2], v[i - 1], v[i++]);
+			break;
+
+		case SQM_TrimidFan:
+			for (int i = 1; i < va;)
+				AddTrimid(v[0], v[i++], v[i++], v[i++]);
+			break;
+
+		case SQM_PyramidFan:
+			for (int i = 1; i < va;)
+				AddPyramid(v[0], v[i++], v[i++], v[i++], v[i++]);
+			break;
+
+		case SQM_PrismFan:
+			for (int i = 2; i < va; i += 2)
+				AddPrism(v[i++], v[i++], v[0], v[i + 1], v[i], v[1]);
+			break;
+
+		case SQM_Cubes:
+			for (int i = 0; i < va;)
+				AddCube(v[i++], v[i++], v[i++], v[i++], v[i++], v[i++], v[i++], v[i++]);
+			break;
+
+		case SQM_CubeStrip:
+			for (int i = 4; i < va;)
+				AddCube(v[i - 4], v[i - 3], v[i - 2], v[i - 1], v[i++], v[i++], v[i++], v[i++]);
+			break;
+		}
+	}
+
+	void Buffer4::AddPoint(const std::vector<int> &v)
+	{
+		AddBySequence(SQM_Points, v);
+	}
+
+	void Buffer4::AddSegment(const std::vector<int> &v)
+	{
+		AddBySequence(SQM_Lines, v);
+	}
+
+	void Buffer4::AddTriangle(const std::vector<int> &v)
+	{
+		AddBySequence(SQM_Triangles, v);
+	}
+
+	void Buffer4::AddQuad(const std::vector<int> &v)
+	{
+		AddBySequence(SQM_Quads, v);
+	}
+
+	void Buffer4::AddTrimid(const std::vector<int> &v)
+	{
+		AddBySequence(SQM_Trimids, v);
+	}
+
+	void Buffer4::AddPolygon(const std::vector<int> &v)
+	{
+		switch (simplex)
+		{
+		case SM_Point:
+			AddBySequence(SQM_Points, v);
+			break;
+		case SM_Line:
+			AddBySequence(SQM_LineLoop, v);
+			break;
+		case SM_Triangle:
+			AddBySequence(SQM_Polygon, v);
+			break;
+		}
+	}
+
 } // namespace Forth

@@ -9,6 +9,11 @@ set(forth_common_srcs
     common/VertexProfile.h
     )
 
+set(forth_extras_srcs
+    extras/MeshGen.h
+    extras/MeshGen.cpp
+    )
+
 set(forth_math_srcs
     math/Bounds4.h
     math/Euler4.h
@@ -43,6 +48,7 @@ add_library(forth_static
     ../include/forth.h
     forth.h
     ${forth_common_srcs}
+    ${forth_extras_srcs}
     ${forth_math_srcs}
     ${forth_rendering_srcs}
     ${forth_visualizer_srcs}

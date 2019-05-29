@@ -5,6 +5,9 @@
 #include "../common/BufferGL.h"
 #include "../math/Transform4.h"
 #include "Projector4.h"
+#include <fstream>
+#include <sstream>
+#include <stdio.h>
 
 /** OpenGL Drawing Macro
  *
@@ -39,6 +42,74 @@ namespace Forth
 		{
 			projector.Project(input, matrix, output);
 			this->driver.Copy(output);
+		}
+
+		bool ReadStreamOBJ(std::istream &stream)
+		{
+			input.Clear();
+
+			while (1)
+			{
+
+				char lineHeader[128];
+				// read the first word of the line
+				stream >> lineHeader;
+				if (stream.eof())
+					break; // EOF = End Of File. Quit the loop.
+
+				// else : parse lineHeader
+
+				if (strcmp(lineHeader, "v") == 0)
+				{
+					Vector4 vertex;
+
+					stream >> vertex.x >> vertex.y >> vertex.z >> vertex.w;
+
+					input.AddVertex(vertex);
+				}
+				else if (strcmp(lineHeader, "f") == 0)
+				{
+					int indices[4];
+
+					stream >> indices[0] >> indices[1] >> indices[2] >> indices[3];
+
+					input.AddSimplex(indices[0], indices[1], indices[2], indices[3]);
+				}
+				else
+				{
+					// Probably a comment, eat up the rest of the line
+					stream.get();
+				}
+			}
+
+			return true;
+		}
+
+		bool WriteStreamOBJ(std::ostream &stream, bool apply_matrix = false)
+		{
+			stream << "# Forth Engine Modified OBJ Format" << std::endl;
+			stream << "# Version: 0.1" << std::endl;
+
+			for (int i = 0; i < input.verticeCount; ++i)
+			{
+				Vector4 &v = input.vertices[i];
+				if (apply_matrix) {
+					v = matrix * v;
+				}
+				stream << "v " << v.x << " " << v.y << " " << v.z << " " << v.w << std::endl;
+			}
+
+			for (int i = 0; i < input.indiceCount;)
+			{
+				stream << "f ";
+				for (int j = 0; j <= input.simplex; ++j)
+				{
+					stream << input.indices[i++] << " ";
+				}
+				stream << std::endl;
+			}
+
+			return true;
 		}
 	};
 } // namespace Forth

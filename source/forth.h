@@ -9,6 +9,7 @@
 #include "common/Buffer3.h"
 #include "common/Buffer4.h"
 #include "common/BufferGL.h"
+#include "extras/MeshGen.h"
 #include "math/Transform4.h"
 #include "rendering/CrossSection.h"
 #include "rendering/Model4.h"
