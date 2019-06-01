@@ -50,6 +50,53 @@ set(forth_visualizer_srcs
     visualizer/WireVisualizer.h
 )
 
+set(forth_physics_broadphase_srcs
+    physics/broadphase/BroadPhase.cpp
+    physics/broadphase/BroadPhase.h
+    physics/broadphase/DynamicTree.cpp
+    physics/broadphase/DynamicTree.h
+)
+
+set(forth_physics_collision_srcs
+    physics/collision/Algorithm.cpp
+    physics/collision/Algorithm.h
+    physics/collision/Box.cpp
+    physics/collision/Box.h
+    physics/collision/Capsule.cpp
+    physics/collision/Capsule.h
+    physics/collision/Collide.cpp
+    physics/collision/Collide.h
+    physics/collision/Convex.h
+    physics/collision/Shape.cpp
+    physics/collision/Shape.h
+    physics/collision/Sphere.cpp
+    physics/collision/Sphere.h
+)
+
+set(forth_physics_dynamics_srcs
+    physics/dynamics/Body.cpp
+    physics/dynamics/Body.h
+    physics/dynamics/Contact.cpp
+    physics/dynamics/Contact.h
+    physics/dynamics/ContactManager.cpp
+    physics/dynamics/ContactManager.h
+    physics/dynamics/ContactSolver.cpp
+    physics/dynamics/ContactSolver.h
+    physics/dynamics/Island.cpp
+    physics/dynamics/Island.h
+    physics/dynamics/RaycastHit4.h
+    physics/dynamics/Scene.cpp
+    physics/dynamics/Scene.h
+)
+
+set(forth_physics_srcs
+    physics/Common.cpp
+    physics/Common.h
+    ${forth_physics_broadphase_srcs}
+    ${forth_physics_collision_srcs}
+    ${forth_physics_dynamics_srcs}
+)
+
 add_library(forth_static
     ../include/forth.h
     forth.h
@@ -58,6 +105,7 @@ add_library(forth_static
     ${forth_math_srcs}
     ${forth_rendering_srcs}
     ${forth_visualizer_srcs}
+    ${forth_physics_srcs}
     )
 
 set_target_properties(forth_static PROPERTIES LINKER_LANGUAGE CXX)
