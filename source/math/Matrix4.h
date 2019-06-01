@@ -1,11 +1,10 @@
 #pragma once
 
-
+#include "../extras/Utils.h"
+#include "Euler4.h"
+#include "Math.h"
 #include "Vector4.h"
 #include <cmath>
-
-#define SWAP(a, b, c) c=a;a=b;b=c;
-#define DEG2RAD PI / 180.f
 
 namespace Forth
 {
@@ -23,9 +22,15 @@ namespace Forth
 
 		Vector4 ex, ey, ez, ew;
 
-		Matrix4(void) { ex = Vector4(); ey = Vector4(); ez = Vector4(); ew = Vector4(); }
+		Matrix4(void)
+		{
+			ex = Vector4();
+			ey = Vector4();
+			ez = Vector4();
+			ew = Vector4();
+		}
 
-		Matrix4(const Vector4& _diag)
+		Matrix4(const Vector4 &_diag)
 		{
 			ex.x = _diag.x;
 			ey.y = _diag.y;
@@ -33,13 +38,13 @@ namespace Forth
 			ew.w = _diag.w;
 		}
 
-		Matrix4(const Vector4& _ex, const Vector4& _ey, const Vector4& _ez, const Vector4& _ew)
-			: ex(_ex), ey(_ey), ez(_ez), ew(_ew) { }
+		Matrix4(const Vector4 &_ex, const Vector4 &_ey, const Vector4 &_ez, const Vector4 &_ew)
+			: ex(_ex), ey(_ey), ez(_ez), ew(_ew) {}
 
 		Matrix4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p)
-			: ex(a, b, c, d), ey(e,f,g,h), ez(i,j,k,l), ew(m,n,o,p) { }
+			: ex(a, b, c, d), ey(e, f, g, h), ez(i, j, k, l), ew(m, n, o, p) {}
 
-		inline Vector4& operator[](int i)
+		inline Vector4 &operator[](int i)
 		{
 			return (&ex)[i];
 		}
@@ -74,7 +79,7 @@ namespace Forth
 			return Vector4(ex.w, ey.w, ez.w, ew.w);
 		}
 
-		void Column(int i, const Vector4& v)
+		void Column(int i, const Vector4 &v)
 		{
 			ex[i] = v.x;
 			ey[i] = v.y;
@@ -82,7 +87,7 @@ namespace Forth
 			ew[i] = v.w;
 		}
 
-		void Set(const Vector4& _ex, const Vector4& _ey, const Vector4& _ez, const Vector4& _ew)
+		void Set(const Vector4 &_ex, const Vector4 &_ey, const Vector4 &_ez, const Vector4 &_ew)
 		{
 			ex = _ex;
 			ey = _ey;
@@ -90,8 +95,7 @@ namespace Forth
 			ew = _ew;
 		}
 
-
-		void operator=(const Matrix4& rhs)
+		void operator=(const Matrix4 &rhs)
 		{
 			// guarantee mutability
 			ex = rhs.ex;
@@ -100,7 +104,7 @@ namespace Forth
 			ew = rhs.ew;
 		}
 
-		void operator+=(const Matrix4& rhs)
+		void operator+=(const Matrix4 &rhs)
 		{
 			ex += rhs.ex;
 			ey += rhs.ey;
@@ -108,7 +112,7 @@ namespace Forth
 			ew += rhs.ew;
 		}
 
-		void operator-=(const Matrix4& rhs)
+		void operator-=(const Matrix4 &rhs)
 		{
 			ex -= rhs.ex;
 			ey -= rhs.ey;
@@ -116,7 +120,7 @@ namespace Forth
 			ew -= rhs.ew;
 		}
 
-		void operator*=(const Matrix4& rhs)
+		void operator*=(const Matrix4 &rhs)
 		{
 			Matrix4 m = Matrix4(
 				*this * rhs.Column0(), *this * rhs.Column1(),
@@ -127,22 +131,35 @@ namespace Forth
 			ew = m.Column3();
 		}
 
-		const Matrix4 operator+(const Matrix4& rhs) const
+		void operator*=(float rhs)
+		{
+			ex *= rhs;
+			ey *= rhs;
+			ez *= rhs;
+			ew *= rhs;
+		}
+
+		bool operator==(const Matrix4 &t) const
+		{
+			return ex == t.ex && ey == t.ey && ez == t.ez && ew == t.ew;
+		}
+
+		Matrix4 operator+(const Matrix4 &rhs) const
 		{
 			return Matrix4(ex + rhs.ex, ey + rhs.ey, ez + rhs.ez, ew + rhs.ew);
 		}
 
-		const Matrix4 operator-(const Matrix4& rhs) const
+		Matrix4 operator-(const Matrix4 &rhs) const
 		{
 			return Matrix4(ex - rhs.ex, ey - rhs.ey, ez - rhs.ez, ew - rhs.ew);
 		}
 
-		const Vector4 operator*(const Vector4& rhs) const
+		Vector4 operator*(const Vector4 &rhs) const
 		{
 			return Vector4(Dot(ex, rhs), Dot(ey, rhs), Dot(ez, rhs), Dot(ew, rhs));
 		}
 
-		const Matrix4 operator*(const Matrix4& rhs) const
+		Matrix4 operator*(const Matrix4 &rhs) const
 		{
 			Matrix4 m = Matrix4(
 				*this * rhs.Column0(), *this * rhs.Column1(),
@@ -150,6 +167,8 @@ namespace Forth
 			m.Transpose();
 			return m;
 		}
+
+		Matrix4 operator/(const Matrix4 &r) const;
 
 		/// <summary>
 		/// Get a 4x4 identity matrix
@@ -161,8 +180,15 @@ namespace Forth
 			return m;
 		}
 
-	private:
+		/// <summary>
+		/// Get a 4x4 identity matrix
+		/// </summary>
+		static Matrix4 zero(void)
+		{
+			return Matrix4();
+		}
 
+	  private:
 		void Transpose(void)
 		{
 			float tmp;
@@ -175,12 +201,11 @@ namespace Forth
 		}
 	};
 
-
 	/// <summary>
 	/// Returns the transposed version of the matrix.
 	/// </summary>
 	/// <remarks> When the matrix is orthogonal, it's equivalent as the inversed version of the matrix </remarks>
-	inline Matrix4 Transpose(const Matrix4& m)
+	inline Matrix4 Transpose(const Matrix4 &m)
 	{
 		return Matrix4(m.Column0(), m.Column1(), m.Column2(), m.Column3());
 	}
@@ -189,7 +214,7 @@ namespace Forth
 	/// Perform a sandwich operation on B by A
 	/// </summary>
 	/// <remarks> The product is a rotation of B that oriented relative to A coordinate axes </remarks>
-	inline Matrix4 Transform(const Matrix4& a, const Matrix4& b)
+	inline Matrix4 Transform(const Matrix4 &a, const Matrix4 &b)
 	{
 		return Transpose(a) * b * a;
 	}
@@ -197,7 +222,7 @@ namespace Forth
 	/// <summary>
 	/// Returns the absolute version of the matrix.
 	/// </summary>
-	inline Matrix4 Abs(const Matrix4& m)
+	inline Matrix4 Abs(const Matrix4 &m)
 	{
 		return Matrix4(Abs(m.ex), Abs(m.ey), Abs(m.ez), Abs(m.ew));
 	}
@@ -210,11 +235,10 @@ namespace Forth
 		return Transpose(from) * to;
 	}
 
-
 	/// <summary>
 	/// Get rotation matrix that rotates identity object to given overward axis
 	/// </summary>
-	inline Matrix4 LookAt(const Vector4& overward)
+	inline Matrix4 LookAt(const Vector4 &overward)
 	{
 		Vector4 a = Normalize(overward);
 
@@ -223,8 +247,7 @@ namespace Forth
 			a.w, -a.z, a.y, -a.x,
 			a.z, a.w, -a.x, -a.y,
 			-a.y, a.x, a.w, -a.z,
-			a.x, a.y, a.z, a.w
-		);
+			a.x, a.y, a.z, a.w);
 	}
 
 	/// <summary>
@@ -235,17 +258,64 @@ namespace Forth
 		return Transpose(LookAt(from)) * (LookAt(to));
 	}
 
-	 /// <summary>
-    /// Convert degree euler to orthogonal matrix rotation individually.
-    /// </summary>
-    /// <remarks>
-    /// This creates a rotation matrix that rotates a point by Y, Z, X, T, U, then V. In that order.
-    /// </remarks>
-	inline Matrix4 Euler(float x, float y, float z, float t, float u, float v);
+	/// <summary>
+	/// Convert degree euler to orthogonal matrix rotation individually.
+	/// </summary>
+	/// <remarks>
+	/// This creates a rotation matrix that rotates a point by Y, Z, X, T, U, then V. In that order.
+	/// </remarks>
+	Matrix4 Euler(float x, float y, float z, float t, float u, float v);
 
-    /// <summary>
-    /// Convert given degree rotation in given axis to orthogonal matrix rotation.
-    /// </summary>
-    /// <remarks>This method is much optimized than Euler(new Euler4(axis, degree))</remarks>
+	Matrix4 Euler(const Euler4 &e);
+	/// <summary>
+	/// Convert given degree rotation in given axis to orthogonal matrix rotation.
+	/// </summary>
+	/// <remarks>This method is much optimized than Euler(new Euler4(axis, degree))</remarks>
 	Matrix4 Euler(int axis, float degree);
-}
+
+	/// <summary>
+	/// Multiply or rotate a vector by the inversed version of this matrix
+	/// </summary>
+	static Vector4 operator/(const Vector4 &v, const Matrix4 &r)
+	{
+		return Transpose(r) * v;
+	}
+
+	inline Matrix4 ComputeBasis(const Vector4 &forward)
+	{
+
+		// Suppose Vector4 a has all equal components and is a unit Vector4: a = (s, s, s, s)
+		// Then 4*s*s = 1, s = sqrt(1/4) = 0.5. This means that at least one component of a
+		// unit Vector4 must be greater or equal to 0.5.
+
+		const Vector4 &a = forward;
+		Vector4 b, c;
+
+		if (Abs(a.x) >= 0.5)
+		{
+			b = Vector4(a.y, -a.x, a.z, a.w);
+			c = Vector4(a.w, a.z, -a.x, a.y);
+		}
+		else if (Abs(a.y) > 0.5)
+		{
+			b = Vector4(-a.y, a.x, a.z, a.w);
+			c = Vector4(a.w, a.z, -a.y, a.x);
+		}
+		else
+		{
+			// X & Y cone
+			b = Vector4(a.x, a.y, a.w, -a.z);
+			c = Vector4(a.w, -a.z, a.x, a.y);
+		}
+
+		return Matrix4(b, c, forward, Cross(a, b, c));
+	}
+
+	inline void ComputeBasis(Vector4 *vector)
+	{
+		const Matrix4 m = LookAt(vector[0]);
+		vector[1] = m.ex;
+		vector[2] = m.ey;
+		vector[3] = m.ez;
+	}
+} // namespace Forth

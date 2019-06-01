@@ -499,7 +499,7 @@ namespace Forth
 	void Buffer4::AddBySequence(SequenceMode mode, const std::vector<int> &v)
 	{
 		// Copy of the original sequence
-		int va = v.size();
+		int va = (int)v.size();
 		switch (mode)
 		{
 		case SQM_Points:

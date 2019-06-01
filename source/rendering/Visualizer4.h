@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../common/Buffer4.h"
 #include "../common/Buffer3.h"
+#include "../common/Buffer4.h"
 
 namespace Forth
 {
 	class Visualizer4
 	{
 
-	public:
-		Visualizer4(void) { }
+	  public:
+		Visualizer4(void) {}
 
 		/// <summary>
 		/// Marks the beginning of the visualizing function
@@ -25,9 +25,8 @@ namespace Forth
 		/// <summary>
 		/// Marks the end of the visualizing function
 		/// </summary>
-		virtual void End(void)
-		{
+		virtual void End(void){
 			// 🤔?
 		};
 	};
-}
+} // namespace Forth

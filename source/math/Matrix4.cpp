@@ -1,7 +1,17 @@
-#include "Matrix4.h"
 
+#include "Matrix4.h"
 namespace Forth
 {
+
+	/// <summary>
+	/// Inversely Multiply or combine rotations between two matrices.
+	/// </summary>
+	/// <remarks> B * A / B returns A </remarks>
+	Matrix4 Matrix4::operator/(const Matrix4 &r) const
+	{
+		return ::Forth::Transpose(r) * *this;
+	}
+
 	/// <summary>
 	/// Convert degree euler to orthogonal matrix rotation individually.
 	/// </summary>
@@ -18,35 +28,34 @@ namespace Forth
 		float u2 = u * DEG2RAD, k = cos(u2), l = sin(u2); // CCW
 		float v2 = v * DEG2RAD, m = cos(v2), n = sin(v2); // CCW
 
-														  // Premultiplied code
-														  //var p1 = (b * g + a * d * f);
-														  //var p2 = (b * d * f + a * g);
-														  //var p3 = (c * j * k);
-														  //var p4 = -(d * j * k) + (c * f * l);
-														  //var p6 = (a * d * g - b * f);
-														  //var p7 = (a * f - b * d * g);
-														  //var p8 = (j * l);
-														  //var p9 = (c * h);
-														  //var p10 = (c * g);
+		// Premultiplied code
+		//var p1 = (b * g + a * d * f);
+		//var p2 = (b * d * f + a * g);
+		//var p3 = (c * j * k);
+		//var p4 = -(d * j * k) + (c * f * l);
+		//var p6 = (a * d * g - b * f);
+		//var p7 = (a * f - b * d * g);
+		//var p8 = (j * l);
+		//var p9 = (c * h);
+		//var p10 = (c * g);
 
-														  // This is corrected version than below (duh)
+		// This is corrected version than below (duh)
 		return Matrix4(a * c * h,
-			-d * h,
-			b * c * h,
-			-j,
-			k * (a * d * f + b * g) - a * c * j * l,
-			c * f * k + d * j * l,
-			k * (b * d * f - a * g) - b * c * j * l,
-			-h * l,
-			-l * n * (a * d * f + b * g) + m * (a * d * g - b * f) - a * c * j * k * n,
-			c * g * m + d * j * k * n - c * f * l * n,
-			-l * n * (b * d * f - a * g) + m * (b * d * g + a * f) - b * c * j * k * n,
-			-h * k * n,
-			l * m * (a * d * f + b * g) + n * (a * d * g - b * f) + a * c * j * k * m,
-			c * f * l * m - d * j * k * m + c * g * n,
-			l * m * (b * d * f - a * g) + n * (b * d * g + a * f) + b * c * j * k * m,
-			h * k * m
-		);
+					   -d * h,
+					   b * c * h,
+					   -j,
+					   k * (a * d * f + b * g) - a * c * j * l,
+					   c * f * k + d * j * l,
+					   k * (b * d * f - a * g) - b * c * j * l,
+					   -h * l,
+					   -l * n * (a * d * f + b * g) + m * (a * d * g - b * f) - a * c * j * k * n,
+					   c * g * m + d * j * k * n - c * f * l * n,
+					   -l * n * (b * d * f - a * g) + m * (b * d * g + a * f) - b * c * j * k * n,
+					   -h * k * n,
+					   l * m * (a * d * f + b * g) + n * (a * d * g - b * f) + a * c * j * k * m,
+					   c * f * l * m - d * j * k * m + c * g * n,
+					   l * m * (b * d * f - a * g) + n * (b * d * g + a * f) + b * c * j * k * m,
+					   h * k * m);
 
 		// matrix{{ach, dh, -bch, -j}, {k(bg-adf)-acjl, cfk-djl, k(bdf+ag)+bcjl, -hl},
 		// { -ln(bg-adf)+m(adg+bf)-acjkn, -cgm-cfln-djkn, -ln(bdf+ag)+m(af-bdg)+bcjkn, -hkn},
@@ -74,7 +83,11 @@ namespace Forth
 		//      n * p7 - (b * p3 - l * p2) * m,
 		//     h * k * m
 		//  );
+	}
 
+	Matrix4 Euler(const Euler4 &e)
+	{
+		Euler(e.x, e.y, e.z, e.t, e.u, e.v);
 	}
 
 	/// <summary>
@@ -85,15 +98,17 @@ namespace Forth
 	{
 		float s = sin(degree * DEG2RAD), c = cos(degree * DEG2RAD);
 		Matrix4 m = Matrix4::identity();
+		// clang-format off
 		switch (axis)
 		{
-		case 0: m.ey.y = c; m.ez.z = c; m.ey.z = -s; m.ez.y = s; return m;
-		case 1: m.ex.x = c; m.ez.z = c; m.ex.z = s; m.ez.x = -s; return m;
-		case 2: m.ex.x = c; m.ey.y = c; m.ex.y = -s; m.ey.x = s; return m;
-		case 3: m.ex.x = c; m.ew.w = c; m.ex.w = -s; m.ew.x = s; return m;
-		case 4: m.ey.y = c; m.ew.w = c; m.ey.w = -s; m.ew.y = s; return m;
-		case 5: m.ez.z = c; m.ew.w = c; m.ez.w = -s; m.ew.z = s; return m;
-		default: return m;
+			case 0: m.ey.y = c; m.ez.z = c; m.ey.z = -s; m.ez.y = s; return m;
+			case 1: m.ex.x = c; m.ez.z = c; m.ex.z = s; m.ez.x = -s; return m;
+			case 2: m.ex.x = c; m.ey.y = c; m.ex.y = -s; m.ey.x = s; return m;
+			case 3: m.ex.x = c; m.ew.w = c; m.ex.w = -s; m.ew.x = s; return m;
+			case 4: m.ey.y = c; m.ew.w = c; m.ey.w = -s; m.ew.y = s; return m;
+			case 5: m.ez.z = c; m.ew.w = c; m.ez.w = -s; m.ew.z = s; return m;
+			default: return m;
 		}
+		// clang-format on
 	}
-}
+} // namespace Forth

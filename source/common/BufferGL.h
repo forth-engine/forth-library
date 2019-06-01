@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../common/Color.h"
-#include "../math/Vector3.h"
 #include "../extras/Utils.h"
+#include "../math/Vector3.h"
 #include "Buffer3.h"
 #include "Enums.h"
 #include <vector>
@@ -56,11 +56,10 @@ namespace Forth
 				};
 				// clang-format on
 
-				for(int j = 0; j < BUFFER_PER_TRIS;)
+				for (int j = 0; j < BUFFER_PER_TRIS;)
 				{
 					vb[vb_count++] = arr[j++];
 				}
-
 			}
 		}
 	};

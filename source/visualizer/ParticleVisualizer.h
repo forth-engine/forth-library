@@ -7,9 +7,8 @@ namespace Forth
 	class ParticleVisualizer : public Visualizer4
 	{
 
-	public:
-
-		ParticleVisualizer(void) { }
+	  public:
+		ParticleVisualizer(void) {}
 
 		Buffer3 *buff;
 
@@ -33,7 +32,6 @@ namespace Forth
 			buff->AddTris((int)buff->vertices_count);
 			buff->AddVert(buffer[0].ToVec3());
 		}
-
 	};
 
-}
+} // namespace Forth

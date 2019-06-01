@@ -1,8 +1,8 @@
 #pragma once
 
+#include "../extras/Utils.h"
 #include "../math/Transform4.h"
 #include "Projector4.h"
-#include "../extras/Utils.h"
 #include <vector>
 
 namespace Forth
@@ -11,7 +11,7 @@ namespace Forth
 	{
 
 		Transform4 view, viewmodel;
-		bool* sides = new bool[4];
+		bool *sides = new bool[4];
 		int sides_cap = 4;
 		Vector4 _temp[4];
 		VertexProfile _temp2[4];
@@ -51,7 +51,8 @@ namespace Forth
 		/// </summary>
 		Vector3 Project(const Vector4 &v) const override
 		{
-			return (viewmodel * v).ToVec3();
+			auto q = (viewmodel * v);
+			return q.ToVec3();
 		}
 
 		/// <summary>
@@ -81,7 +82,7 @@ namespace Forth
 	};
 
 	/// <summary>
-	/// Internally do Plane4.Intersect(), then Vector4.Lerp()
+	/// Internally do Plane4.Intersect(), then Lerp()
 	/// </summary>
 	inline Vector4 CrossInterpolate(const Vector4 &x, const Vector4 &y)
 	{
@@ -89,7 +90,7 @@ namespace Forth
 	}
 
 	/// <summary>
-	/// Internally do Plane4.Intersect(), then Vector4.Lerp(), and make the phase out
+	/// Internally do Plane4.Intersect(), then Lerp(), and make the phase out
 	/// </summary>
 	inline Vector4 CrossInterpolate(const Vector4 &x, const Vector4 &y, float *phase)
 	{

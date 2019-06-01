@@ -6,8 +6,8 @@ namespace Forth
 {
 	class WireVisualizer : public Visualizer4
 	{
-	public:
-		WireVisualizer(void) { }
+	  public:
+		WireVisualizer(void) {}
 
 		Buffer3 *buff;
 
@@ -36,4 +36,4 @@ namespace Forth
 		}
 	};
 
-}
+} // namespace Forth

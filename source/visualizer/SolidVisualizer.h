@@ -32,7 +32,7 @@ namespace Forth
 		/// </summary>
 		void RefineTriangleOrder(void);
 
-		Vector3 GetAverage(const Vector3* v, const int size);
+		Vector3 GetAverage(const Vector3 *v, const int size);
 	};
 
 } // namespace Forth

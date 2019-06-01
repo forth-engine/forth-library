@@ -18,4 +18,19 @@
 #include "visualizer/ParticleVisualizer.h"
 #include "visualizer/CustomVisualizer.h"
 
+#include "physics/Broadphase/BroadPhase.h"
+#include "physics/Broadphase/DynamicTree.h"
+#include "physics/Collision/Box.h"
+#include "physics/Collision/Capsule.h"
+#include "physics/Collision/Collide.h"
+#include "physics/Collision/Convex.h"
+#include "physics/Collision/Shape.h"
+#include "physics/Collision/Sphere.h"
+#include "physics/Dynamics/Body.h"
+#include "physics/Dynamics/Contact.h"
+#include "physics/Dynamics/ContactManager.h"
+#include "physics/Dynamics/ContactSolver.h"
+#include "physics/Dynamics/Island.h"
+#include "physics/Dynamics/Scene.h"
+
 #endif

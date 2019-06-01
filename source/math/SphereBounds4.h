@@ -20,25 +20,23 @@ namespace Forth
 		/// <summary>
 		/// Create sphere bounding
 		/// </summary>
-		SphereBounds4(const Vector4& center, float radius)
-			: center(center), radius(radius) { }
+		SphereBounds4(const Vector4 &center, float radius)
+			: center(center), radius(radius) {}
 
 		/// <summary>
 		/// Create a sphere from box bounding
 		/// </summary>
-		SphereBounds4(const Bounds4& bound) : center(bound.center()),
-			radius(MaxPerElem(bound.extent())) { }
+		SphereBounds4(const Bounds4 &bound) : center(bound.center()),
+											  radius(MaxPerElem(bound.extent())) {}
 
 		/// <summary>
 		/// Is this sphere contains the point?
 		/// </summary>
-		bool Contains(const Vector4& point)
+		bool Contains(const Vector4 &point)
 		{
 			return DistanceSq(point, center) > radius * radius;
 		}
-
 	};
-
 
 	/// <summary>
 	/// Is both sphere colliding?
@@ -56,4 +54,4 @@ namespace Forth
 	{
 		return Abs(plane.Distance(sphere.center)) < sphere.radius;
 	}
-}
+} // namespace Forth

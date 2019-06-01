@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "Vector3.h"
 #include "Vector4.h"
 
@@ -24,26 +23,26 @@ namespace Forth
 		/// <summary>
 		/// Create empty euler.
 		/// </summary>
-		Euler4(void) { }
+		Euler4(void) : x(0), y(0), z(0), t(0), u(0), v(0) {}
 
 		/// <summary>
 		/// Create new euler with given individual values.
 		/// </summary>
 		Euler4(float x, float y, float z, float t, float u, float v)
-			: x(x), y(y), z(z), t(t), u(u), v(v) { }
-
+			: x(x), y(y), z(z), t(t), u(u), v(v) {}
 
 		/// <summary>
 		/// Create new euler with given individual values from a pair of Vector3.
 		/// </summary>
 		Euler4(Vector3 xyz, Vector3 tuv)
-			: x(xyz.x), y(xyz.y), z(xyz.z), t(tuv.x), u(tuv.y), v(tuv.z) { }
+			: x(xyz.x), y(xyz.y), z(xyz.z), t(tuv.x), u(tuv.y), v(tuv.z) {}
 
 		/// <summary>
 		/// Create new euler with a value for given axis index.
 		/// </summary>
-		Euler4(int axis, int value)
+		Euler4(int axis, float value)
 		{
+			x = y = z = t = u = v = 0;
 			(&x)[axis] = value;
 		}
 
@@ -58,7 +57,7 @@ namespace Forth
 		/// <summary>
 		/// Set an axis value of specified index.
 		/// </summary>
-		float& operator[](int i)
+		float &operator[](int i)
 		{
 			return (&x)[i];
 		}
@@ -78,7 +77,7 @@ namespace Forth
 			x = y = z = t = u = v = a;
 		}
 
-		void operator+=(const Euler4& rhs)
+		void operator+=(const Euler4 &rhs)
 		{
 			x += rhs.x;
 			y += rhs.y;
@@ -88,7 +87,7 @@ namespace Forth
 			v += rhs.v;
 		}
 
-		void operator-=(const Euler4& rhs)
+		void operator-=(const Euler4 &rhs)
 		{
 			x -= rhs.x;
 			y -= rhs.y;
@@ -130,7 +129,7 @@ namespace Forth
 		/// <summary>
 		/// Axis-wisely add two euler values
 		/// </summary>
-		const Euler4 operator+(const Euler4& rhs) const
+		const Euler4 operator+(const Euler4 &rhs) const
 		{
 			return Euler4(x + rhs.x, y + rhs.y, z + rhs.z, t + rhs.t, u + rhs.u, v + rhs.v);
 		}
@@ -138,7 +137,7 @@ namespace Forth
 		/// <summary>
 		/// Axis-wisely subtract two euler values
 		/// </summary>
-		const Euler4 operator-(const Euler4& rhs) const
+		const Euler4 operator-(const Euler4 &rhs) const
 		{
 			return Euler4(x - rhs.x, y - rhs.y, z - rhs.z, t - rhs.t, u - rhs.u, v - rhs.v);
 		}
@@ -146,7 +145,7 @@ namespace Forth
 		/// <summary>
 		/// Axis-wisely scale both euler values.
 		/// </summary>
-		const Euler4 operator*(const Euler4& rhs) const
+		const Euler4 operator*(const Euler4 &rhs) const
 		{
 			return Euler4(x * rhs.x, y * rhs.y, z * rhs.z, t * rhs.t, u * rhs.u, v * rhs.v);
 		}
@@ -183,23 +182,27 @@ namespace Forth
 		{
 			return Vector3(t, u, v);
 		}
+
+		static Euler4 zero()
+		{
+			return Euler4();
+		}
 	};
-
-
-	/// <summary>
-	/// Get the squared length of the euler
-	/// </summary>
-	inline float LengthSq(Euler4 v)
-	{
-		return Dot(v, v);
-	}
 
 	/// <summary>
 	/// Get the dot product of the euler
 	/// </summary>
-	inline float Dot(Euler4 a, Euler4 b)
+	inline float Dot(const Euler4 &a, const Euler4 &b)
 	{
 		return a.x * b.x + a.y * b.y + a.z * b.z + a.t * b.t + a.u * b.u + a.v * b.v;
+	}
+
+	/// <summary>
+	/// Get the squared length of the euler
+	/// </summary>
+	inline float LengthSq(const Euler4 &v)
+	{
+		return Dot(v, v);
 	}
 
 	/// <summary>
@@ -209,7 +212,7 @@ namespace Forth
 	inline Euler4 LerpAngle(Euler4 a, Euler4 b, float t)
 	{
 		return Euler4(LerpAngle(a.x, b.x, t), LerpAngle(a.y, b.y, t), LerpAngle(a.z, b.z, t),
-			LerpAngle(a.t, b.t, t), LerpAngle(a.u, b.u, t), LerpAngle(a.v, b.v, t));
+					  LerpAngle(a.t, b.t, t), LerpAngle(a.u, b.u, t), LerpAngle(a.v, b.v, t));
 	}
 
 	/// <summary>
@@ -226,8 +229,7 @@ namespace Forth
 			(a.x * b.y) - (b.x * a.y),
 			(a.x * b.w) - (b.x * a.w),
 			(a.y * b.w) - (b.y * a.w),
-			(a.z * b.w) - (b.z * a.w)
-		);
+			(a.z * b.w) - (b.z * a.w));
 	}
 
 	/// <summary>
@@ -244,4 +246,4 @@ namespace Forth
 			(a.x * b.y) - (a.y * b.x) - (a.v * b.w),
 			(a.t * b.x) + (a.u * b.y) + (a.v * b.z));
 	}
-}
+} // namespace Forth

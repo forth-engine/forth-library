@@ -22,9 +22,13 @@ set(forth_math_srcs
     math/Matrix4.cpp
     math/Matrix4.h
     math/Plane4.h
+    math/Ray4.h
     math/SphereBounds4.h
+    math/Tensor4.cpp
+    math/Tensor4.h
     math/Transform4.h
     math/Vector3.h
+    math/Vector4.cpp
     math/Vector4.h
     )
 

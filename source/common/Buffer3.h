@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../math/Vector3.h"
 #include "../common/Color.h"
 #include "../extras/Utils.h"
-#include "VertexProfile.h"
+#include "../math/Vector3.h"
 #include "Enums.h"
+#include "VertexProfile.h"
 #include <vector>
 
 namespace Forth
@@ -55,6 +55,5 @@ namespace Forth
 			indices[indices_count++] = b;
 			indices[indices_count++] = c;
 		}
-
 	};
-}
+} // namespace Forth

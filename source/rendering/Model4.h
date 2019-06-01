@@ -14,15 +14,15 @@
  * @model Model4
  * @vb GLuint to a vertex buffer
 */
-#define FORTH_GL_DRAW(model, vb)                                                                                    \
-	do                                                                                                              \
-	{                                                                                                               \
-		glBindBuffer(GL_ARRAY_BUFFER, vb);                                                                          \
+#define FORTH_GL_DRAW(model, vb)                                                                                   \
+	do                                                                                                             \
+	{                                                                                                              \
+		glBindBuffer(GL_ARRAY_BUFFER, vb);                                                                         \
 		glBufferData(GL_ARRAY_BUFFER, model.driver.vb_count * sizeof(float), &model.driver.vb[0], GL_STREAM_DRAW); \
-		glEnableVertexAttribArray(0);                                                                               \
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(0));                            \
-		glEnableVertexAttribArray(1);                                                                               \
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));            \
+		glEnableVertexAttribArray(0);                                                                              \
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(0));                           \
+		glEnableVertexAttribArray(1);                                                                              \
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));           \
 		glDrawArrays(GL_TRIANGLES, 0, model.driver.vb_count / 6);                                                  \
 	} while (0)
 
@@ -93,7 +93,8 @@ namespace Forth
 			for (int i = 0; i < input.verticeCount; ++i)
 			{
 				Vector4 &v = input.vertices[i];
-				if (apply_matrix) {
+				if (apply_matrix)
+				{
 					v = matrix * v;
 				}
 				stream << "v " << v.x << " " << v.y << " " << v.z << " " << v.w << std::endl;

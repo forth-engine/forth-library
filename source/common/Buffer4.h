@@ -158,39 +158,38 @@ namespace Forth
 		void SequenceGrid(int x, int y = 1, int z = 1, int w = 1);
 
 		/// <summary>
-        /// Add by given sequence
-        /// </summary>
-        void AddBySequence(SequenceMode mode, const std::vector<int> &v);
+		/// Add by given sequence
+		/// </summary>
+		void AddBySequence(SequenceMode mode, const std::vector<int> &v);
 
-        /// <summary>
-        /// Add points.
-        /// </summary>
-        void AddPoint(const std::vector<int> &v);
+		/// <summary>
+		/// Add points.
+		/// </summary>
+		void AddPoint(const std::vector<int> &v);
 
-        /// <summary>
-        /// Add segments.
-        /// </summary>
-        void AddSegment(const std::vector<int> &v);
+		/// <summary>
+		/// Add segments.
+		/// </summary>
+		void AddSegment(const std::vector<int> &v);
 
-        /// <summary>
-        /// Add triangles.
-        /// </summary>
-        void AddTriangle(const std::vector<int> &v);
+		/// <summary>
+		/// Add triangles.
+		/// </summary>
+		void AddTriangle(const std::vector<int> &v);
 
-        /// <summary>
-        /// Add quads.
-        /// </summary>
-        void AddQuad(const std::vector<int> &v);
+		/// <summary>
+		/// Add quads.
+		/// </summary>
+		void AddQuad(const std::vector<int> &v);
 
-        /// <summary>
-        /// Add trimids.
-        /// </summary>
-        void AddTrimid(const std::vector<int> &v);
+		/// <summary>
+		/// Add trimids.
+		/// </summary>
+		void AddTrimid(const std::vector<int> &v);
 
-        /// <summary>
-        /// Add polygon points/wires/surfaces.
-        /// </summary>
-        void AddPolygon(const std::vector<int> &v);
-
+		/// <summary>
+		/// Add polygon points/wires/surfaces.
+		/// </summary>
+		void AddPolygon(const std::vector<int> &v);
 	};
 } // namespace Forth

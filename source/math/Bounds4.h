@@ -1,9 +1,8 @@
 #pragma once
 
-
 #include "Math.h"
-#include "Vector4.h"
 #include "Plane4.h"
+#include "Vector4.h"
 
 namespace Forth
 {
@@ -14,27 +13,29 @@ namespace Forth
 	{
 		Vector4 min, max;
 
-		Bounds4(void) { }
-		Bounds4(const Vector4& _extent) : min(-_extent), max(_extent) { }
-		Bounds4(const Vector4& _min, const Vector4& _max) : min(_min), max(_max) { }
+		Bounds4(void) {}
+		Bounds4(const Vector4 &_extent) : min(-_extent), max(_extent) {}
+		Bounds4(const Vector4 &_min, const Vector4 &_max) : min(_min), max(_max) {}
 
-		void Set(const Vector4& _min, const Vector4& _max)
+		void Set(const Vector4 &_min, const Vector4 &_max)
 		{
 			min = _min;
 			max = _max;
 		}
 
-		void Allocate(const Vector4& point)
+		void Allocate(const Vector4 &point)
 		{
 			min = Min(min, point);
 			max = Min(max, point);
 		}
 
-		inline Vector4 center(void) const {
+		inline Vector4 center(void) const
+		{
 			return (max + min) * 0.5f;
 		}
 
-		inline Vector4 extent(void) const {
+		inline Vector4 extent(void) const
+		{
 			return (max - min) * 0.5f;
 		}
 
@@ -65,7 +66,7 @@ namespace Forth
 		}
 
 		/// <summary> Returns a point that either inside or touching the bound </summary>
-		inline Vector4 Clamp(Vector4& point) const
+		inline Vector4 Clamp(Vector4 &point) const
 		{
 			Vector4 c = center(), e = extent();
 			point = point - c;
@@ -77,9 +78,10 @@ namespace Forth
 		}
 
 		/// <summary> Returns a point that either outside or touching the bound </summary>
-		inline Vector4 Clip(Vector4& t)
+		inline Vector4 Clip(Vector4 &t)
 		{
-			if (!Contains(t)) return t;
+			if (!Contains(t))
+				return t;
 
 			Vector4 c = center(), e = extent();
 			t -= c;
@@ -91,9 +93,8 @@ namespace Forth
 			return t + c;
 		}
 
-
 		/// <summary> Check if given ray is colliding with the bound </summary>
-		inline bool Raycast(Vector4 p, Vector4 d)
+		inline bool Raycast(const Vector4 &p, const Vector4 &d)
 		{
 
 			Vector4 dI = Invert(d);
@@ -113,7 +114,7 @@ namespace Forth
 	};
 
 	/// <summary> Determine if and only if A partially contains B </summary>
-	inline bool IsIntersecting(const Bounds4& a, const Bounds4& b)
+	inline bool IsIntersecting(const Bounds4 &a, const Bounds4 &b)
 	{
 		return b.max > a.min && b.min < a.max;
 	}
@@ -125,13 +126,13 @@ namespace Forth
 	}
 
 	/// <summary> Intersect two bounds </summary>
-	inline Bounds4 Intersect(const Bounds4& a, const Bounds4& b)
+	inline Bounds4 Intersect(const Bounds4 &a, const Bounds4 &b)
 	{
 		return Bounds4(Max(a.min, b.min), Min(a.max, b.max));
 	}
 
 	/// <summary> Scales the bound's extent </summary>
-	inline Bounds4 Scale(const Bounds4& b, const Vector4& s)
+	inline Bounds4 Scale(const Bounds4 &b, const Vector4 &s)
 	{
 		Vector4 c = b.center();
 		Vector4 e = b.extent() * s;
@@ -139,9 +140,9 @@ namespace Forth
 	}
 
 	/// <summary> Compare which Bounds4 is the closest. Positive means L is closer </summary>
-	inline float Compare(Vector4 center, const Bounds4& l, const Bounds4& r)
+	inline float Compare(Vector4 center, const Bounds4 &l, const Bounds4 &r)
 	{
 		return DistanceSq(r.Clamp(center), center) - DistanceSq(l.Clamp(center), center);
 	}
 
-}
+} // namespace Forth

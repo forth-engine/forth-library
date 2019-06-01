@@ -1,13 +1,17 @@
 #pragma once
+#include <algorithm>
 #include <cmath>
 #include <float.h>
 
 #define PI (3.14159265359f)
 #define MAX_FLOAT (FLT_MAX)
 #define EPSILON (FLT_EPSILON)
+#define DEG2RAD PI / 180.f
+#define RAD2DEG 180.f / PI
 
 namespace Forth
 {
+
 	inline float Sqrt(float x)
 	{
 		return std::sqrt(x);
@@ -17,10 +21,10 @@ namespace Forth
 	inline float InvSqrt(float x)
 	{
 		float xhalf = 0.5f * x;
-		int i = *(int*)&x;               // get bits for floating value
-		i = 0x5f375a86 - (i >> 1);       // gives initial guess y0
-		x = *(float*)&i;                 // convert bits back to float
-		x = x * (1.5f - xhalf * x * x);  // Newton step, increases accuracy
+		int i = *(int *)&x;				// get bits for floating value
+		i = 0x5f375a86 - (i >> 1);		// gives initial guess y0
+		x = *(float *)&i;				// convert bits back to float
+		x = x * (1.5f - xhalf * x * x); // Newton step, increases accuracy
 		return x;
 	}
 
@@ -88,14 +92,6 @@ namespace Forth
 	}
 
 	template <class T>
-	inline void Swap(T& a, T& b)
-	{
-		T tmp = a;
-		a = b;
-		b = tmp;
-	}
-
-	template <class T>
 	inline T Sign(const T x)
 	{
 		return T(T(0) < x) - T(T(x) < T(0));
@@ -107,4 +103,9 @@ namespace Forth
 		return a + (b - a) * t;
 	}
 
-}
+	inline float Invert(float f)
+	{
+		return 1.f / f;
+	}
+
+} // namespace Forth
