@@ -9,7 +9,7 @@ namespace Forth
 			// Apply gravity, Integrate velocities, create state buffers, calculate world inertia
 			for (size_t i = 0; i < bodies.size(); ++i)
 			{
-				Body body = bodies[i];
+				Body &body = *bodies[i];
 
 				if ((body.flags & BFL_Dynamic) > 0)
 				{
@@ -35,18 +35,18 @@ namespace Forth
 
 			// Create contact solver, pass in state buffers, create buffers for contacts
 			// Initialize velocity constraint for normal + friction and warm start
-			contactSolver.PreSolve(Dt);
+			contactSolver.PreSolve(*this, Dt);
 
 			// Solve contacts
 			for (int h = 0; h < Common::ITERATIONS; ++h)
-				contactSolver.Solve();
+				contactSolver.Solve(*this);
 
 			// Copy back state buffers
 			// Integrate positions
 			// Release Island tag for statics (so it can be used for other islands)
 			for (size_t i = 0; i < bodies.size(); ++i)
 			{
-				Body body = bodies[i];
+				Body &body = *bodies[i];
 				VelocityState v = velocities[i];
 
 				if ((body.flags & BFL_Static) > 0)
@@ -57,7 +57,7 @@ namespace Forth
 
 				if (!Common::SIM_RANGE.Contains(body.P))
 				{
-					body.Active(false);
+					body.SetActive(false);
 				}
 
 				// Integrate position
@@ -71,7 +71,7 @@ namespace Forth
 				float minSleepTime = FLT_MAX;
 				for (size_t i = 0; i < bodies.size(); ++i)
 				{
-					Body body = bodies[i];
+					Body &body = *bodies[i];
 
 					if ((body.flags & BFL_Static) > 0)
 						continue;
@@ -92,17 +92,17 @@ namespace Forth
 				if (minSleepTime > Common::SLEEP_TIME)
 				{
 					for (size_t i = 0; i < bodies.size(); ++i)
-						bodies[i].SetToSleep();
+						bodies[i]->SetToSleep();
 				}
 			}
 		}
-		void Island::Add(Body body)
+		void Island::Add(Body* body)
 		{
-			body.islandIndex = bodies.size();
+			body->islandIndex = bodies.size();
 			bodies.push_back(body);
 			velocities.push_back(VelocityState());
 		}
-		void Island::Add(Contact contact)
+		void Island::Add(Contact* contact)
 		{
 			contacts.push_back(contact);
 		}
@@ -115,10 +115,11 @@ namespace Forth
 
 		Island::Island()
 		{
-			bodies = ::std::vector<Body>();
+			bodies = ::std::vector<Body*>();
 			velocities = ::std::vector<VelocityState>();
-			contacts = ::std::vector<Contact>();
-			contactSolver = ContactSolver(*this);
+			contacts = ::std::vector<Contact*>();
+			contactSolver = ContactSolver();
+			Dt = 0;
 		}
 	} // namespace Physics
 } // namespace Forth

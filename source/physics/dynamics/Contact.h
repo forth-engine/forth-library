@@ -15,7 +15,6 @@ namespace Forth
 			CF_Island = 0x00000004,		  // For marking during island forming
 		};
 
-
 		struct ContactEdge
 		{
 			Body *other;
@@ -23,7 +22,6 @@ namespace Forth
 
 			void Setup(Body *b, Body *o, class Contact *c);
 		};
-
 
 		struct ContactStateUnit
 		{
@@ -72,10 +70,9 @@ namespace Forth
 			void Setup(const class Contact &c);
 		};
 
-
 		class Manifold
 		{
-		public:
+		  public:
 			Shape *A;
 			Shape *B;
 
@@ -100,10 +97,9 @@ namespace Forth
 			void MakeContact(const Vector4 &n);
 		};
 
-
 		class Contact
 		{
-		public:
+		  public:
 			Shape *A, *B;
 			class Body *bodyA, *bodyB;
 
@@ -126,7 +122,6 @@ namespace Forth
 
 			void SolveCollision();
 		};
-
 
 	} // namespace Physics
 } // namespace Forth

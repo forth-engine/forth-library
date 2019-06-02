@@ -26,7 +26,7 @@ namespace Forth
 		void Allocate(const Vector4 &point)
 		{
 			min = Min(min, point);
-			max = Min(max, point);
+			max = Max(max, point);
 		}
 
 		inline Vector4 center(void) const
@@ -66,15 +66,15 @@ namespace Forth
 		}
 
 		/// <summary> Returns a point that either inside or touching the bound </summary>
-		inline Vector4 Clamp(Vector4 &point) const
+		inline Vector4 Clamp(const Vector4 &point) const
 		{
 			Vector4 c = center(), e = extent();
-			point = point - c;
+			Vector4 p = point - c;
 
 			for (int i = 0; i < 4; i++)
-				point[i] = Forth::Clamp(-e[i], e[i], point[i]);
+				p[i] = Forth::Clamp(-e[i], e[i], point[i]);
 
-			return point + c;
+			return p + c;
 		}
 
 		/// <summary> Returns a point that either outside or touching the bound </summary>

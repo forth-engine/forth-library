@@ -10,17 +10,13 @@ namespace Forth
 		// Contact solver
 		class ContactSolver
 		{
-		public:
-			ContactSolver(){}
-			ContactSolver(class Island& island);
+		  public:
+			ContactSolver();
 
-			void PreSolve(float dt);
+			void PreSolve(class Island &island, float dt);
 
-			void Solve();
-
-			::std::vector<Contact>* contacts;
-			::std::vector<struct VelocityState>* velocities;
+			void Solve(class Island &island);
 		};
 
 	} // namespace Physics
-}
+} // namespace Forth

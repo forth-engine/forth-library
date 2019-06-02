@@ -17,16 +17,16 @@ namespace Forth
 		float Common::PENETRATION_SLOP = 0.02f;
 		float Common::MAX_DT = 0.02f;
 
-		float Common::DefMixRestitution(Shape* A, Shape* B)
+		float Common::DefMixRestitution(Shape *A, Shape *B)
 		{
 			return A->restitution > B->restitution ? A->restitution : B->restitution;
 		}
-		float Common::DefMixFriction(Shape* A, Shape* B)
+		float Common::DefMixFriction(Shape *A, Shape *B)
 		{
 			return (A->friction + B->friction) * 0.5f;
 		}
 
-		static Common::ShapeMixCB MixRestitution = Common::DefMixRestitution;
-		static Common::ShapeMixCB MixFriction = Common::DefMixFriction;
+		Common::ShapeMixCB Common::MixRestitution = Common::DefMixRestitution;
+		Common::ShapeMixCB Common::MixFriction = Common::DefMixFriction;
 	} // namespace Physics
 } // namespace Forth

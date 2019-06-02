@@ -6,15 +6,11 @@ namespace Forth
 	namespace Physics
 	{
 
-		Contact::Contact()
+		Contact::Contact() : manifold(), edgeA(), edgeB(), state()
 		{
-			manifold = Manifold();
-			edgeA = ContactEdge();
-			edgeB = ContactEdge();
-			state = ContactState();
 		}
 
-		void Contact::Setup(Shape * A, Shape * B)
+		void Contact::Setup(Shape *A, Shape *B)
 		{
 			this->A = A;
 			this->B = B;
@@ -24,6 +20,7 @@ namespace Forth
 			restitution = Common::MixRestitution(A, B);
 			sensor = A->sensor || B->sensor;
 			hash = A->hash ^ B->hash;
+			flags = 0;
 
 			manifold.Setup(A, B);
 			edgeA.Setup(bodyA, bodyB, this);
@@ -46,30 +43,30 @@ namespace Forth
 			else
 				flags &= (flags & CF_Colliding) > 0 ? ~CF_Colliding : ~CF_WasColliding;
 		}
-		void Manifold::MakeContact(const Vector4 & n, const Vector4 & p, float d)
+		void Manifold::MakeContact(const Vector4 &n, const Vector4 &p, float d)
 		{
 			normal = Normalize(n);
 			depth[contacts] = d;
 			position[contacts] = p;
 			contacts++;
 		}
-		void Manifold::MakeContact(const Vector4 & p, float d)
+		void Manifold::MakeContact(const Vector4 &p, float d)
 		{
 			depth[contacts] = d;
 			position[contacts] = p;
 			contacts++;
 		}
-		void Manifold::MakeContact(const Vector4 & p0, const Vector4 & p1)
+		void Manifold::MakeContact(const Vector4 &p0, const Vector4 &p1)
 		{
 			depth[contacts] = LengthSq(p1 - p0);
 			position[contacts] = (p0 + p1) * 0.5f;
 			contacts++;
 		}
-		void Manifold::MakeContact(const Vector4 & n)
+		void Manifold::MakeContact(const Vector4 &n)
 		{
 			normal = Normalize(n);
 		}
-		void ContactEdge::Setup(Body * b, Body * o, Contact * c)
+		void ContactEdge::Setup(Body *b, Body *o, Contact *c)
 		{
 			b->contactList.push_back(this);
 			other = o;
@@ -82,7 +79,7 @@ namespace Forth
 				units[i] = ContactStateUnit();
 			}
 		}
-		void ContactState::UpdateInput(const Contact & c)
+		void ContactState::UpdateInput(const Contact &c)
 		{
 			const Manifold &m = c.manifold;
 
@@ -103,12 +100,12 @@ namespace Forth
 					ComputeBasis(vectors);
 			}
 		}
-		void ContactState::Setup(const Contact & c)
+		void ContactState::Setup(const Contact &c)
 		{
 			friction = c.friction;
 			restitution = c.restitution;
 		}
-		void ContactStateUnit::Update(const Manifold & m, const Contact & c, int i)
+		void ContactStateUnit::Update(const Manifold &m, const Contact &c, int i)
 		{
 			rA = m.position[i] - c.bodyA->P;
 			rB = m.position[i] - c.bodyB->P;
@@ -116,11 +113,11 @@ namespace Forth
 			depth = m.depth[i];
 			bias = 0;
 		}
-		void ContactStateBody::Update(const Body & body)
+		void ContactStateBody::Update(const Body &body)
 		{
 			m = body.invMass;
 			index = body.islandIndex;
 			i = body.invInertiaWorld;
 		}
-} // namespace Physics
+	} // namespace Physics
 } // namespace Forth

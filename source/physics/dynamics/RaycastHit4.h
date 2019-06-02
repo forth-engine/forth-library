@@ -1,4 +1,6 @@
 #pragma once
+#include "../Common.h"
+
 namespace Forth
 {
 	namespace Physics

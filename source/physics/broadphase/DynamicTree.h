@@ -11,7 +11,7 @@ namespace Forth
 	{
 		struct ITreeCallback
 		{
-			virtual void TreeCallback(int id);
+			virtual void TreeCallback(int id)=0;
 		};
 
 		/// Dynamic Bounds4 Tree

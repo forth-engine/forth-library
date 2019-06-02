@@ -5,6 +5,10 @@ namespace Forth
 {
 	namespace Physics
 	{
+		Vector4 Algorithm::input[Common::MULTICONTACT_COUNT];
+		Vector4 Algorithm::result[Common::MULTICONTACT_COUNT];
+		Vector4 Algorithm::incident[8];
+
 		//--------------------------------------------------------------------------------------------------
 		// Get nearest point from two edges, return true if parallel
 
@@ -72,7 +76,7 @@ namespace Forth
 		//--------------------------------------------------------------------------------------------------
 		// Return (W-axis) oriented box extent & rotation necessary for clipping
 
-		void Algorithm::ComputeReferenceEdgesAndBasis(const Vector4 &eR, const Transform4& rtx, const Vector4 &n, int axis, Matrix4 &basis, Vector4 &e)
+		void Algorithm::ComputeReferenceEdgesAndBasis(const Vector4 &eR, const Transform4 &rtx, const Vector4 &n, int axis, Matrix4 &basis, Vector4 &e)
 		{
 			Vector4 nr = n / rtx.rotation;
 
@@ -141,7 +145,7 @@ namespace Forth
 		// Get the most potential face candidate that Incidents N
 		// That is: The face that most parallel to N
 
-		void Algorithm::ComputeIncidentFace(const Transform4& itx, const Vector4 &e, const Vector4 &n, Vector4 result[])
+		void Algorithm::ComputeIncidentFace(const Transform4 &itx, const Vector4 &e, const Vector4 &n, Vector4 result[])
 		{
 			auto ni = (n / itx.rotation);
 

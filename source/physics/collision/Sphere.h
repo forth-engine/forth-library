@@ -24,6 +24,8 @@ namespace Forth
 
 			Sphere() : Shape(CSH_Sphere) {}
 
+			Sphere(float radius) : radius(radius), Shape(CSH_Sphere) {}
+
 			//float Radius{ get { return radius; } set { radius = value; if (body != NULL) body.flags |= BFL_DirtyMass; } }
 		};
 	} // namespace Physics

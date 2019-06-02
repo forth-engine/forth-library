@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Shape.h"
 #include "../dynamics/RaycastHit4.h"
+#include "Shape.h"
 
 namespace Forth
 {

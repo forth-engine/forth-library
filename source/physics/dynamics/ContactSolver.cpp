@@ -5,19 +5,21 @@ namespace Forth
 {
 	namespace Physics
 	{
-		ContactSolver::ContactSolver(Island& island)
+		ContactSolver::ContactSolver()
 		{
-			contacts = &island.contacts;
-			velocities = &island.velocities;
+			/*contacts = &island->contacts;
+			velocities = &island->velocities;*/
 		}
 
-		void ContactSolver::PreSolve(float dt)
+		void ContactSolver::PreSolve(Island &island, float dt)
 		{
-			for (size_t i = 0; i < contacts->size(); ++i)
+			auto &contacts = island.contacts;
+			auto &velocities = island.velocities;
+
+			for (size_t i = 0; i < contacts.size(); ++i)
 			{
-				Contact c = (*contacts)[i];
-				ContactState cs = c.state;
-				ContactStateUnit u;
+				Contact &c = *contacts[i];
+				ContactState &cs = c.state;
 
 				cs.UpdateInput(c);
 
@@ -26,13 +28,13 @@ namespace Forth
 
 				float nm = cs.A.m + cs.B.m, dv;
 
-				Vector4 vA = (*velocities)[cs.A.index].v, vB = (*velocities)[cs.B.index].v;
-				Euler4 wA = (*velocities)[cs.A.index].w, wB = (*velocities)[cs.B.index].w;
+				const Vector4 &vA = velocities[cs.A.index].v, &vB = velocities[cs.B.index].v;
+				const Euler4 &wA = velocities[cs.A.index].w, &wB = velocities[cs.B.index].w;
 
 				for (int j = 0; j < cs.contacts; j++)
 				{
 
-					u = cs.units[j];
+					ContactStateUnit &u = cs.units[j];
 
 					// Precalculate bias factor
 
@@ -54,21 +56,24 @@ namespace Forth
 				}
 			}
 		}
-		void ContactSolver::Solve()
+		void ContactSolver::Solve(Island &island)
 		{
-			for (size_t i = 0; i < (*contacts).size(); ++i)
+			auto &contacts = island.contacts;
+			auto &velocities = island.velocities;
+
+			for (size_t i = 0; i < contacts.size(); ++i)
 			{
-				ContactState cs = (*contacts)[i].state;
+				ContactState &cs = (*contacts[i]).state;
 
 				if (cs.contacts == 0)
 					continue;
 
-				Vector4 vA = (*velocities)[cs.A.index].v, vB = (*velocities)[cs.B.index].v;
-				Euler4 wA = (*velocities)[cs.A.index].w, wB = (*velocities)[cs.B.index].w;
+				Vector4 &vA = velocities[cs.A.index].v, &vB = velocities[cs.B.index].v;
+				Euler4 &wA = velocities[cs.A.index].w, &wB = velocities[cs.B.index].w;
 
 				for (int j = 0; j < cs.contacts; j++)
 				{
-					ContactStateUnit u = cs.units[j];
+					ContactStateUnit &u = cs.units[j];
 
 					// relative velocity at contact
 					Vector4 dv = vB + Cross(wB, u.rB) - vA - Cross(wA, u.rA);
@@ -102,8 +107,8 @@ namespace Forth
 					}
 				}
 
-				(*velocities)[cs.A.index] = VelocityState(vA, wA);
-				(*velocities)[cs.B.index] = VelocityState(vB, wB);
+				/*velocities[cs.A.index] = VelocityState(vA, wA);
+				velocities[cs.B.index] = VelocityState(vB, wB);*/
 			}
 		}
 	} // namespace Physics

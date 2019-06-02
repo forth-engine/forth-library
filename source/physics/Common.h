@@ -2,17 +2,17 @@
 
 #include "../extras/Utils.h"
 #include "../math/Bounds4.h"
-#include "../math/math.h"
 #include "../math/Matrix4.h"
 #include "../math/Plane4.h"
 #include "../math/Ray4.h"
+#include "../math/Tensor4.h"
 #include "../math/Transform4.h"
 #include "../math/Vector4.h"
-#include "../math/Tensor4.h"
-#include <vector>
-#include <stack>
-#include <map>
+#include "../math/math.h"
 #include <algorithm>
+#include <map>
+#include <stack>
+#include <vector>
 
 namespace Forth
 {
@@ -93,7 +93,7 @@ namespace Forth
 			/// </summary>
 			static float MAX_DT;
 
-			typedef float(*ShapeMixCB)(class Shape*, class Shape*);
+			typedef float (*ShapeMixCB)(class Shape *, class Shape *);
 
 			static ShapeMixCB MixRestitution;
 			static ShapeMixCB MixFriction;
@@ -101,12 +101,12 @@ namespace Forth
 			/// <summary>
 			/// Restitution (bounce) mixing. Default is max
 			/// </summary>
-			static float DefMixRestitution(class Shape* A, class Shape* B);
+			static float DefMixRestitution(class Shape *A, class Shape *B);
 
 			/// <summary>
 			/// Friction (slide) mixing. Default is average
 			/// </summary>
-			static float DefMixFriction(class Shape* A, class Shape* B);
+			static float DefMixFriction(class Shape *A, class Shape *B);
 		};
 	} // namespace Physics
 } // namespace Forth

@@ -2,8 +2,8 @@
 
 #include "../Common.h"
 #include "../broadphase/BroadPhase.h"
-#include "Contact.h"
 #include "Body.h"
+#include "Contact.h"
 
 namespace Forth
 {
@@ -12,29 +12,29 @@ namespace Forth
 		class ContactManager
 		{
 		  public:
-			  ContactManager();
+			ContactManager();
 
 			// Add a contact contact for a pair of objects
 			// unless the contact contact already exists
-			  void AddContact(Shape *A, Shape *B);
+			void AddContact(Shape *A, Shape *B);
 
 			// Remove a specific contact
-			  void RemoveContact(const Contact &contact);
+			void RemoveContact(Contact *contact, bool explicit_erase = false);
 
 			// Remove all contacts from a body
-			  void RemoveContactsFromBody(const Body& body);
+			void RemoveContactsFromBody(Body *body);
 
-			  void RemoveFromBroadphase(Body body);
+			void RemoveFromBroadphase(Body *body);
 
 			// Remove contacts without broadphase overlap
 			// Solves contact manifolds
-			  void TestCollisions();
+			void TestCollisions();
 
-			  void CheckCollision(Contact c);
+			void CheckCollision(Contact &c);
 
-			::std::map<int, Contact> contactList;
+			::std::map<int, Contact *> contactList;
 			BroadPhase broadphase;
-			struct IContactListener* contactListener;
+			struct IContactListener *contactListener;
 		};
 	} // namespace Physics
 } // namespace Forth

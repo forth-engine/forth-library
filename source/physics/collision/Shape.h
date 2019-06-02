@@ -34,11 +34,11 @@ namespace Forth
 				this->type = type;
 			}
 
-			class Body* body;
+			class Body* body = NULL;
 
-			int hash;
+			int hash = 0;
 
-			int broadPhaseIndex;
+			int broadPhaseIndex = 0;
 
 			ShapeType type;
 
@@ -68,7 +68,7 @@ namespace Forth
 
 			// -- Public accessor
 
-			void *Tag;
+			void *Tag = NULL;
 
 			static Shape* CreateShape(ShapeType type);
 		};

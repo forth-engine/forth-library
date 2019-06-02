@@ -15,7 +15,7 @@ namespace Forth
 			Vector4 v;
 
 			VelocityState() : w(Euler4()), v(Vector4()) {}
-			VelocityState(const Vector4& v, const Euler4& w)
+			VelocityState(const Vector4 &v, const Euler4 &w)
 			{
 				this->v = v;
 				this->w = w;
@@ -24,20 +24,20 @@ namespace Forth
 
 		class Island
 		{
-		public:
+		  public:
 			void Solve(void);
 
-			void Add(Body body);
+			void Add(Body *body);
 
-			void Add(Contact contact);
+			void Add(Contact *contact);
 
 			void Clear(void);
 
 			Island();
 
-			::std::vector<Body> bodies;
+			::std::vector<Body *> bodies;
 			::std::vector<VelocityState> velocities;
-			::std::vector<Contact> contacts;
+			::std::vector<Contact *> contacts;
 			ContactSolver contactSolver;
 
 			float Dt;

@@ -18,8 +18,8 @@ namespace Forth
 		// can be called frequently, so make them efficient.
 		struct IContactListener
 		{
-			virtual void BeginContact(Contact* contact) = 0;
-			virtual void EndContact(Contact* contact) = 0;
+			virtual void BeginContact(Contact *contact) = 0;
+			virtual void EndContact(Contact *contact) = 0;
 		};
 
 		// This class represents general queries for points, AABBs and Raycasting.
@@ -29,28 +29,27 @@ namespace Forth
 		// ported.
 		typedef void (*QueryCallback)(const Shape &);
 
-
 		class Scene
 		{
 		  public:
 			Island island;
 			ContactManager contactManager;
-			::std::stack<Body> stack;
-			::std::vector<Body> bodies;
-			::std::map<int,Shape*> shapes;
+			::std::stack<Body *> stack;
+			::std::vector<Body *> bodies;
+			::std::map<int, Shape *> shapes;
 
 			Scene();
 
 			// Run the simulation forward in time by dt
 			void Step(float Dt);
 
-			void CollectRelatedBodies(Body seed);
+			void CollectRelatedBodies(Body *seed);
 
-			void CreateBody(Body& body);
+			void CreateBody(Body *body);
 
 			// Frees a body, removes all shapes associated with the body and frees
 			// all shapes and contacts associated and attached to this body.
-			void RemoveBody(Body& body);
+			void RemoveBody(Body *body);
 
 			// Removes all bodies from the scene.
 			void ClearBodies();
@@ -108,7 +107,7 @@ namespace Forth
 			/// <summary>
 			/// Query the world to find any shapes intersecting a ray.
 			/// </summary>
-			void QueryRaycast(RaycastHit4& rayCast);
+			void QueryRaycast(RaycastHit4 &rayCast);
 		};
 	} // namespace Physics
 } // namespace Forth

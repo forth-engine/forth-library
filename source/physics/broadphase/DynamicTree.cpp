@@ -58,7 +58,7 @@ namespace Forth
 				int id = stack.top();
 				stack.pop();
 
-				Node n = Nodes[id];
+				Node &n = Nodes[id];
 
 				if (IsIntersecting(aabb, n.aabb))
 				{
@@ -93,7 +93,7 @@ namespace Forth
 				if (id == -1)
 					continue;
 
-				Node n = Nodes[id];
+				Node &n = Nodes[id];
 				if (!n.aabb.Raycast(p0, p1))
 					continue;
 
@@ -120,13 +120,13 @@ namespace Forth
 			// Find the closest leaf
 
 			Vector4 c = Nodes[id].aabb.center();
-			Node N = Nodes[Root], R, L, P;
+			Node &N = Nodes[Root];
 			int n = Root, r, l, p;
 
 			while (N.height > 0)
 			{
-				R = Nodes[r = N.right];
-				L = Nodes[l = N.left];
+				Node &R = Nodes[r = N.right];
+				Node &L = Nodes[l = N.left];
 				if (Compare(c, L.aabb, R.aabb) >= 0)
 				{
 					N = L;
@@ -140,7 +140,7 @@ namespace Forth
 			}
 
 			{
-				P = Nodes[p = AllocateNode()];
+				Node &P = Nodes[p = AllocateNode()];
 				int tmp;
 				// Make P becomes parent of N and ID
 				SWAP(P.left, N.left, tmp)
@@ -168,10 +168,10 @@ namespace Forth
 				return;
 			}
 
-			Node N = Nodes[id], P = Nodes[N.parent], S;
+			Node &N = Nodes[id], &P = Nodes[N.parent];
 			int s = (P.left == id) ? P.right : P.left, p = N.parent, tmp;
 
-			S = Nodes[s];
+			Node &S = Nodes[s];
 			// Make S become part of grandparent N, detach N & P
 			SWAP(S.parent, P.parent, tmp)
 
@@ -192,7 +192,7 @@ namespace Forth
 		{
 			while (index != -1)
 			{
-				Node n = Nodes[index];
+				Node &n = Nodes[index];
 
 				n.height = Max(Nodes[n.left].height, Nodes[n.right].height) + 1;
 				n.aabb = Combine(Nodes[n.left].aabb, Nodes[n.right].aabb);
@@ -202,7 +202,7 @@ namespace Forth
 		}
 		int DynamicTree::AllocateNode()
 		{
-			Node F = Nodes[FreeNode];
+			Node &F = Nodes[FreeNode];
 			int f = FreeNode;
 
 			if (F.next == NodesCap)
@@ -256,6 +256,6 @@ namespace Forth
 			right = r;
 		}
 		DynamicTree::Node::Node() {}
-		DynamicTree::Node::Node(int next) { this->next = next; }
+		DynamicTree::Node::Node(int next) : Node() { this->next = next; }
 	} // namespace Physics
 } // namespace Forth

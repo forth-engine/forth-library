@@ -16,7 +16,7 @@ namespace Forth
 		class BroadPhase : public ITreeCallback
 		{
 		  public:
-		  	BroadPhase() {}
+			BroadPhase() {}
 
 			BroadPhase(class ContactManager *manager);
 
@@ -37,7 +37,7 @@ namespace Forth
 
 			::std::vector<int> MoveBuffer;
 
-			DynamicTree Tree = DynamicTree();
+			DynamicTree Tree;
 
 			int CurrentIndex;
 

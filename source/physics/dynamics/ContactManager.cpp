@@ -5,17 +5,14 @@ namespace Forth
 {
 	namespace Physics
 	{
-		ContactManager::ContactManager()
+		ContactManager::ContactManager() : broadphase(this), contactList(), contactListener(NULL)
 		{
-			broadphase = BroadPhase(this);
-			contactList = ::std::map<int, Contact>();
-			contactListener = NULL;
 		}
 
 		// Add a contact contact for a pair of objects
 		// unless the contact contact already exists
 
-		void ContactManager::AddContact(Shape * A, Shape * B)
+		void ContactManager::AddContact(Shape *A, Shape *B)
 		{
 			Body *bodyA = A->body, *bodyB = B->body;
 
@@ -27,9 +24,9 @@ namespace Forth
 				return;
 
 			// Create contact
-			auto contact = Contact();
-			contact.Setup(A, B);
-			contactList[contact.hash] = contact;
+			auto contact = new Contact();
+			contact->Setup(A, B);
+			contactList.insert(::std::make_pair(contact->hash, contact));
 
 			bodyA->SetToAwake();
 			bodyB->SetToAwake();
@@ -37,36 +34,40 @@ namespace Forth
 
 		// Remove a specific contact
 
-		void ContactManager::RemoveContact(const Contact & contact)
+		void ContactManager::RemoveContact(Contact *contact, bool explicit_erase)
 		{
-			Body *A = contact.bodyA;
-			Body *B = contact.bodyB;
+			Body *A = contact->bodyA;
+			Body *B = contact->bodyB;
 
 			// Remove from A
-			A->contactList.erase(std::find(A->contactList.begin(), A->contactList.end(), &contact.edgeA));
+			A->contactList.erase(std::find(A->contactList.begin(), A->contactList.end(), &contact->edgeA));
 
 			// Remove from B
-			A->contactList.erase(std::find(B->contactList.begin(), B->contactList.end(), &contact.edgeB));
+			B->contactList.erase(std::find(B->contactList.begin(), B->contactList.end(), &contact->edgeB));
 
 			A->SetToAwake();
 			B->SetToAwake();
 
-			// Remove contact from the manager
-			contactList.erase(contact.hash);
+			if (!explicit_erase)
+			{
+				// Remove contact from the manager
+				contactList.erase(contact->hash);
+			}
+			delete contact;
 		}
 
 		// Remove all contacts from a body
 
-		void ContactManager::RemoveContactsFromBody(const Body & body)
+		void ContactManager::RemoveContactsFromBody(Body *body)
 		{
-			for (size_t i = body.contactList.size(); i-- > 0;)
+			for (size_t i = body->contactList.size(); i-- > 0;)
 			{
-				RemoveContact(*body.contactList[i]->contact);
+				RemoveContact(body->contactList[i]->contact);
 			}
 		}
-		void ContactManager::RemoveFromBroadphase(Body body)
+		void ContactManager::RemoveFromBroadphase(Body *body)
 		{
-			for (auto shape : body.shapes)
+			for (auto shape : body->shapes)
 			{
 				broadphase.RemoveShape(shape);
 			}
@@ -77,40 +78,45 @@ namespace Forth
 
 		void ContactManager::TestCollisions()
 		{
-
-			for (auto const &h : contactList)
+			for (auto h = contactList.cbegin(); h != contactList.cend();)
 			{
-				auto contact = h.second;
-				Shape *A = contact.A, *B = contact.B;
+				auto contact = h->second;
+
+				Shape *A = contact->A, *B = contact->B;
 				Body *bodyA = A->body, *bodyB = B->body;
 
-				contact.flags &= ~BFL_Island;
+				contact->flags &= ~CF_Island;
 
 				if (!bodyA->IsAwake() && !bodyB->IsAwake())
 				{
+					++h;
 					continue;
 				}
 
 				if (!Body::CanCollide(bodyA, bodyB))
 				{
-					RemoveContact(contact);
+					RemoveContact(contact, true);
+					h = contactList.erase(h);
 					continue;
 				}
 
 				// Check if contact should persist
 				if (!broadphase.TestOverlap(A->broadPhaseIndex, B->broadPhaseIndex))
 				{
-					RemoveContact(contact);
+					RemoveContact(contact, true);
+					h = contactList.erase(h);
 					continue;
 				}
 
-				contact.SolveCollision();
+				contact->SolveCollision();
 
 				if (contactListener != NULL)
-					CheckCollision(contact);
+					CheckCollision(*contact);
+
+				++h;
 			}
 		}
-		void ContactManager::CheckCollision(Contact c)
+		void ContactManager::CheckCollision(Contact &c)
 		{
 			bool a = (c.flags & CF_Colliding) > 0;
 			bool b = (c.flags & CF_WasColliding) > 0;

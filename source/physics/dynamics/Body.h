@@ -36,116 +36,86 @@ namespace Forth
 
 		class Body
 		{
-		  public:
-			Tensor4 invInertiaModel;
+			friend struct Collide;
+			friend class Scene;
+			friend class Shape;
+			friend class Manifold;
+			friend class Island;
+			friend class ContactManager;
+			friend class ContactSolver;
+			friend struct ContactEdge;
+			friend struct ContactStateBody;
+			friend struct ContactStateUnit;
 
-			Tensor4 invInertiaWorld;
+			Tensor4 invInertiaModel = Tensor4::zero();
+			Tensor4 invInertiaWorld = Tensor4::zero();
 
-			float mass;
+			float mass = 0;
+			float invMass = 0;
 
-			float invMass;
-
-			Vector4 linearVelocity;
-
-			Euler4 angularVelocity;
-
-			Vector4 force;
-
-			Euler4 torque;
-
+			Vector4 linearVelocity = Vector4::zero();
+			Euler4 angularVelocity = Euler4::zero();
+			Vector4 force = Vector4::zero();
+			Euler4 torque = Euler4::zero();
 			/// Compound transform
 			Transform4 Tx = Transform4::identity();
-
 			/// Local body center
 			Vector4 C = Vector4();
-
 			/// World body center
 			Vector4 P = Vector4();
-
-			float sleepTime;
-
-			int islandIndex;
-
+			float sleepTime = 0;
+			int islandIndex = -1;
 			// Use BFL_*
 			int flags = BFL_Active | BFL_AllowSleep | BFL_Static | BFL_Awake | BFL_DirtyMass;
 
-			::std::vector<Shape*> shapes = ::std::vector<Shape*>();
-
+			::std::vector<Shape *> shapes = ::std::vector<Shape *>();
 			::std::vector<ContactEdge *> contactList = ::std::vector<ContactEdge *>();
-
-			class Scene *scene;
-
+			class Scene *scene = NULL;
 			int layers = 0x1;
-
 			float gravityScale = 1;
-
 			float linearDamping = 0.1f;
-
 			float angularDamping = 0.1f;
 
 			void CalculateMassData();
-
 			void SynchronizeProxies();
 
-			void SetScene(Scene* scene);
-
-			// -- Public Accessor
-
-			void AddShape(Shape* shape);
-
-			void RemoveShape(Shape* shape);
-
+		  public:
+			void *Tag = NULL;
+			void SetScene(Scene *scene);
+			void AddShape(Shape *shape);
+			void RemoveShape(Shape *shape);
 			void RemoveAllShapes();
-
 			void ApplyForce(Vector4 force);
-
 			void ApplyForceAtWorldPoint(Vector4 force, Vector4 point);
-
 			void ApplyLinearImpulse(Vector4 impulse);
-
 			void ApplyLinearImpulseAtWorldPoint(Vector4 impulse, Vector4 point);
-
 			void ApplyTorque(Euler4 torque);
-
 			void SetToAwake();
-
 			void SetToSleep();
-
-			bool IsAwake();
-
-			bool Active(void);
-
-			bool Active(bool value);
-
-			// Vector4 LinearVelocity{ get { return linearVelocity; } set { linearVelocity = value; if (LengthSq(value) > 1e-4f) SetToAwake(); } }
-
-			// Euler4 AngularVelocity{ get { return angularVelocity; } set { angularVelocity = value; if (Euler4.LengthSq(value) > 1e-4f) SetToAwake(); } }
-
-			// float LinearDamping{ get { return linearDamping; } set { linearDamping = Max(0, value); } }
-
-			// float AngularDamping{ get { return angularDamping; } set { angularDamping = Max(0, value); } }
-
-			// float GravityScale{ get { return gravityScale; } set { gravityScale = value; } }
-
-			void *Tag;
 
 			static bool CanCollide(Body *a, Body *b);
 
-			int GetFlags();
-
-			void SetFlags(BodyFlags type, bool awake, bool allowSleep, bool active);
-
-			Transform4 GetTransform();
-
-			void GetTransform(Transform4 t);
-
-			void SetTransform(Vector4 position, Matrix4 rotation);
-
-			bool operator==(const Body& o)
-			{
-				return this == &o || this->Tag == o.Tag;
-			}
 			Body() {}
+
+			inline Transform4 GetTransform() { return Transform4(P, Tx.rotation); }
+			inline bool IsAwake() { return (flags & BFL_Awake) > 0; }
+			inline bool GetActive() { return (flags & BFL_Active) > 0; }
+			inline Vector4 GetLinearVelocity() { return linearVelocity; }
+			inline Euler4 GetAngularVelocity() { return angularVelocity; }
+			inline float GetLinearDamping() { return linearDamping; }
+			inline float GetAngularDamping() { return angularDamping; }
+			inline float GetGravityScale() { return gravityScale; }
+			inline int GetFlags() { return flags; }
+
+			void SetTransform(const Transform4 &matrix);
+			void SetTransform(const Vector4 &position, const Matrix4 &rotation);
+			void SetActive(bool active);
+			void SetLinearVelocity(const Vector4 &value);
+			void SetAngularVelocity(const Euler4 &value);
+			void SetLinearDamping(float value);
+			void SetAngularDamping(float value);
+			void SetGravityScale(float value);
+			void SetFlags(bool dynamics, bool kinematics, bool awake, bool allowSleep, bool active);
 		};
 	} // namespace Physics
 } // namespace Forth

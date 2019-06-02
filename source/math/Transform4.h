@@ -117,7 +117,7 @@ namespace Forth
 
 		/// <summary> Convert to non-orthogonal matrix by applying a scale </summary>
 		/// <remarks> Do not inverse or multiply any matrix produced using this method. </remarks>
-		Transform4 ToTRS(Vector4 scale)
+		Transform4 ToTRS(const Vector4& scale)
 		{
 			return Transform4(position, rotation * Matrix4(scale));
 		}

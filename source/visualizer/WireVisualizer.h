@@ -35,5 +35,4 @@ namespace Forth
 			}
 		}
 	};
-
 } // namespace Forth

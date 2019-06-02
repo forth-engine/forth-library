@@ -5,22 +5,16 @@ namespace Forth
 {
 	namespace Physics
 	{
-		BroadPhase::BroadPhase(ContactManager* manager)
-		{
-			Manager = manager;
+		BroadPhase::BroadPhase(ContactManager *manager) : Tree(), Manager(manager), PairBuffer(), MoveBuffer() {}
 
-			PairBuffer = ::std::vector<ContactPair>();
-			MoveBuffer = ::std::vector<int>();
-		}
-
-		void BroadPhase::InsertShape(Shape* shape, const Bounds4 &aabb)
+		void BroadPhase::InsertShape(Shape *shape, const Bounds4 &aabb)
 		{
 			int id = Tree.Insert(aabb, shape);
 			shape->broadPhaseIndex = id;
 			BufferMove(id);
 		}
 
-		void BroadPhase::RemoveShape(Shape* shape)
+		void BroadPhase::RemoveShape(Shape *shape)
 		{
 			Tree.Remove(shape->broadPhaseIndex);
 		}
@@ -45,7 +39,7 @@ namespace Forth
 			for (size_t i = 0; i < PairBuffer.size(); ++i)
 			{
 				// Add contact to manager
-				ContactPair pair = PairBuffer[i];
+				ContactPair &pair = PairBuffer[i];
 				Manager->AddContact(Tree.GetShape(pair.A), Tree.GetShape(pair.B));
 			}
 		}
@@ -75,7 +69,7 @@ namespace Forth
 			int iA = Min(index, CurrentIndex);
 			int iB = Max(index, CurrentIndex);
 
-			PairBuffer.push_back({ iA, iB });
+			PairBuffer.push_back({iA, iB});
 		}
 
 	} // namespace Physics

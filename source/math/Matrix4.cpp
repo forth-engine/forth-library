@@ -87,7 +87,7 @@ namespace Forth
 
 	Matrix4 Euler(const Euler4 &e)
 	{
-		Euler(e.x, e.y, e.z, e.t, e.u, e.v);
+		return Euler(e.x, e.y, e.z, e.t, e.u, e.v);
 	}
 
 	/// <summary>

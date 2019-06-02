@@ -80,14 +80,14 @@ namespace Forth
 		void Body::SetScene(Scene *scene)
 		{
 			this->scene = scene;
-			for (auto &shape : shapes)
+			for (auto shape : shapes)
 			{
 				shape->CheckHash();
 			}
 		}
 		void Body::AddShape(Shape *shape)
 		{
-			if (shape->body != NULL)
+			if (shape->body != NULL || this->scene == NULL)
 				throw;
 
 			shapes.push_back(shape);
@@ -116,7 +116,7 @@ namespace Forth
 				Contact *contact = contactList[i]->contact;
 
 				if (shape == contact->A || shape == contact->B)
-					scene->contactManager.RemoveContact(*contact);
+					scene->contactManager.RemoveContact(contact);
 			}
 
 			flags |= BFL_DirtyMass;
@@ -134,7 +134,7 @@ namespace Forth
 
 			shapes.clear();
 
-			scene->contactManager.RemoveContactsFromBody(*this);
+			scene->contactManager.RemoveContactsFromBody(this);
 		}
 		void Body::ApplyForce(Vector4 force)
 		{
@@ -188,28 +188,6 @@ namespace Forth
 				angularVelocity = torque = Euler4::zero();
 			}
 		}
-		bool Body::IsAwake()
-		{
-			return (flags & BFL_Awake) > 0;
-		}
-		inline bool Body::Active(void)
-		{
-			return (flags & BFL_Active) > 0;
-		}
-		inline bool Body::Active(bool value)
-		{
-			if (!value)
-			{
-				scene->contactManager.RemoveContactsFromBody(*this);
-				SetToSleep();
-				flags &= ~BFL_Active;
-			}
-			else
-			{
-				flags |= BFL_Active;
-				SetToAwake();
-			}
-		}
 		bool Body::CanCollide(Body *a, Body *b)
 		{
 			// Can't collide self
@@ -230,29 +208,55 @@ namespace Forth
 
 			return true;
 		}
-		int Body::GetFlags() { return flags; }
-		void Body::SetFlags(BodyFlags type, bool awake, bool allowSleep, bool active)
+		void Body::SetTransform(const Transform4 &matrix)
 		{
-
-			flags = type;
-
-			sleepTime = 0;
-			flags |= awake ? BFL_Awake : 0;
-			flags |= allowSleep ? BFL_AllowSleep : 0;
-			flags |= active ? BFL_Active : 0;
+			SetTransform(matrix.position, matrix.rotation);
 		}
-		Transform4 Body::GetTransform() { return Tx; }
-		void Body::GetTransform(Transform4 t)
-		{
-			t.position = P;
-			t.rotation = Tx.rotation;
-		}
-		void Body::SetTransform(Vector4 position, Matrix4 rotation)
+		void Body::SetTransform(const Vector4 &position, const Matrix4 &rotation)
 		{
 			P = position;
 			Tx.rotation = rotation;
 
 			SynchronizeProxies();
+		}
+		void Body::SetActive(bool value)
+		{
+			if (!value)
+			{
+				scene->contactManager.RemoveContactsFromBody(this);
+				SetToSleep();
+				flags &= ~BFL_Active;
+			}
+			else
+			{
+				flags |= BFL_Active;
+				SetToAwake();
+			}
+		}
+		void Body::SetLinearVelocity(const Vector4 &value)
+		{
+			linearVelocity = value;
+			if (LengthSq(value) > 1e-5f)
+				SetToAwake();
+		}
+		void Body::SetAngularVelocity(const Euler4 &value)
+		{
+			angularVelocity = value;
+			if (LengthSq(value) > 1e-5f)
+				SetToAwake();
+		}
+		void Body::SetLinearDamping(float value) { linearDamping = value; }
+		void Body::SetAngularDamping(float value) { angularDamping = value; }
+		void Body::SetGravityScale(float value) { gravityScale = value; }
+		void Body::SetFlags(bool dynamics, bool kinematics, bool awake, bool allowSleep, bool active)
+		{
+			sleepTime = 0;
+			// Preserve internal flags
+			flags &= BFL_DirtyMass | BFL_Identity | BFL_ZeroInertia | BFL_ZeroMass | BFL_Island;
+			flags |= dynamics ? BFL_Dynamic : kinematics ? BFL_Kinematic : BFL_Static;
+			flags |= awake ? BFL_Awake : 0;
+			flags |= allowSleep ? BFL_AllowSleep : 0;
+			flags |= active ? BFL_Active : 0;
 		}
 	} // namespace Physics
 } // namespace Forth
