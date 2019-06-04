@@ -17,15 +17,10 @@ namespace Forth
 		/// </summary>
 		float radius;
 
-		/// <summary>
-		/// Create sphere bounding
-		/// </summary>
+
+		SphereBounds4() : center(), radius() {}
 		SphereBounds4(const Vector4 &center, float radius)
 			: center(center), radius(radius) {}
-
-		/// <summary>
-		/// Create a sphere from box bounding
-		/// </summary>
 		SphereBounds4(const Bounds4 &bound) : center(bound.center()),
 											  radius(MaxPerElem(bound.extent())) {}
 

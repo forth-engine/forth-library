@@ -125,6 +125,7 @@ namespace Forth
 
 	void MeshGen::MakeTesseract(Buffer4 &input, float scale)
 	{
+		scale *= .5;
 		// Permutation of (-+1, -+1, -+1, -+1)
 		// Idk why the order have to be like this?
 		for (float w = -1; w <= 1; w += 2)
@@ -176,7 +177,7 @@ namespace Forth
 		switch (input.simplex)
 		{
 		case SM_Point:
-			input.AddPoints(a, b, c, d, e, f);
+			input.AddPoint({ a, b, c, d, e, f });
 			break;
 		case SM_Line:
 			input.AddQuad(c, d, e, f);
@@ -184,8 +185,8 @@ namespace Forth
 			input.AddBySequence(SQM_LineFan, {b, c, d, e, f});
 			break;
 		case SM_Triangle:
-			input.AddPolygon({{a, c, d, e, f}});
-			input.AddPolygon({{b, c, d, e, f}});
+			input.AddPolygon({a, c, d, e, f});
+			input.AddPolygon({b, c, d, e, f});
 			break;
 		case SM_Tetrahedron:
 			input.AddPyramid(a, d, c, f, e);
@@ -252,9 +253,9 @@ namespace Forth
 		{
 		case SM_Point:
 
-			input.AddPoints(
+			input.AddPoint({
 				a, b, c, d, e, f, g, h, i, j,
-				k, l, m, n, o, p, q, r, s, t);
+				k, l, m, n, o, p, q, r, s, t });
 			break;
 
 		case SM_Line:

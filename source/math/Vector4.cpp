@@ -217,4 +217,8 @@ namespace Forth
 	{
 		return a.x > a.y && a.x > a.z && a.x > a.w ? 0 : (a.y > a.z && a.y > a.w ? 1 : (a.z > a.w ? 2 : 3));
 	}
+
+	const Vector4 Vector4::one = Vector4(1);
+	const Vector4 Vector4::zero = Vector4();
+
 } // namespace Forth

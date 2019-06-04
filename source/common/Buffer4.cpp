@@ -523,8 +523,8 @@ namespace Forth
 			break;
 
 		case SQM_LineLoop:
-			for (int i = 0; i < va;)
-				AddSegment(v[i], (v[++i % va]));
+			for (int i = 0; i < va; ++i)
+				AddSegment(v[i], (v[(i + 1) % va]));
 			break;
 
 		case SQM_Triangles:
@@ -553,8 +553,8 @@ namespace Forth
 			break;
 
 		case SQM_Polygon:
-			for (int i = 1; i < va;)
-				AddTriangle(v[0], v[i], (v[++i % va]));
+			for (int i = 1; i < va; ++i)
+				AddTriangle(v[(i + 1) % va], v[i], v[0]);
 			break;
 
 		case SQM_Trimids:

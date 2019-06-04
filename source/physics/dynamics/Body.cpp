@@ -11,20 +11,20 @@ namespace Forth
 			SynchronizeProxies();
 
 			Tensor4 inertia = Tensor4::zero();
-			Vector4 lc = Vector4::zero();
+			Vector4 lc = Vector4::zero;
 			invMass = mass = 0;
 			MassData md;
 
 			flags &= ~BFL_DirtyMass;
 
-			if (shapes.size() == 1 && shapes[0]->local == Transform4::identity())
+			if (shapes.size() == 1 && shapes[0]->local == Transform4::identity)
 				flags |= BFL_Identity;
 			else
 				flags &= ~BFL_Identity;
 
 			if ((flags & (BFL_Static | BFL_Kinematic)) > 0)
 			{
-				C = Vector4::zero();
+				C = Vector4::zero;
 				P = Tx.position;
 				invInertiaModel = invInertiaWorld = Tensor4::zero();
 				return;
@@ -184,7 +184,7 @@ namespace Forth
 			{
 				flags &= ~BFL_Awake;
 				sleepTime = 0;
-				linearVelocity = force = Vector4::zero();
+				linearVelocity = force = Vector4::zero;
 				angularVelocity = torque = Euler4::zero();
 			}
 		}

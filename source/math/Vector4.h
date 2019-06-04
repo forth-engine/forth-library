@@ -171,18 +171,12 @@ namespace Forth
 		/// <summary>
 		/// Vector with values of one.
 		/// </summary>
-		inline static Vector4 one(void)
-		{
-			return Vector4(1);
-		}
+		static const Vector4 one;
 
 		/// <summary>
 		/// Vector with values of one.
 		/// </summary>
-		inline static Vector4 zero(void)
-		{
-			return Vector4(0.f);
-		}
+		static const Vector4 zero;
 	};
 
 	/// <summary>

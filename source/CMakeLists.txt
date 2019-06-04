@@ -26,6 +26,7 @@ set(forth_math_srcs
     math/SphereBounds4.h
     math/Tensor4.cpp
     math/Tensor4.h
+    math/Transform4.cpp
     math/Transform4.h
     math/Vector3.h
     math/Vector4.cpp
@@ -35,6 +36,8 @@ set(forth_math_srcs
 set(forth_rendering_srcs
     rendering/CrossSection.cpp
     rendering/CrossSection.h
+    rendering/Frustum4.cpp
+    rendering/Frustum4.h
     rendering/Model4.h
     rendering/Projector4.cpp
     rendering/Projector4.h

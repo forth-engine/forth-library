@@ -6,8 +6,6 @@ namespace Forth
 
 	CrossSection::CrossSection(void) : Projector4()
 	{
-
-		Setup(Forth::Transform4::identity());
 	}
 
 	void CrossSection::InternalProject1(const Buffer4 &source, Visualizer4 *dest)
@@ -59,7 +57,6 @@ namespace Forth
 	void CrossSection::InternalProject3(const Buffer4 &source, Visualizer4 *dest)
 	{
 		int *t4 = source.indices;
-		Vector4 *v4 = source.vertices;
 
 		// Loop over all point
 		for (int i = 0; i < source.indiceCount; i += 4)
@@ -74,7 +71,7 @@ namespace Forth
 			{
 				if (sides[a = t4[_leftEdges[j] + i]] ^ sides[b = t4[_rightEdges[j] + i]])
 				{
-					_temp[iter++] = CrossInterpolate(viewmodel * v4[a], viewmodel * v4[b]);
+					_temp[iter++] = CrossInterpolate(vmverts[a], vmverts[b]);
 				}
 			}
 
@@ -87,12 +84,15 @@ namespace Forth
 		viewmodel = view * transform;
 
 		EnsureCapacity(&sides, 0, &sides_cap, source.verticeCount);
+		EnsureCapacity(&vmverts, 0, &vmverts_cap, source.verticeCount);
 		{
-			// faster than "sides[i] = viewmodel * source.vertices[i] > 0"
-			Vector4 &vmw = viewmodel.rotation.ew;
-			float vmwp = viewmodel.position.w;
+			// faster than "sides[i] = (viewmodel * source.vertices[i]).w > 0"
+			/*const Vector4 &vmw = viewmodel.rotation.ew;
+			float vmwp = -viewmodel.position.w;*/
 			for (int i = 0; i < source.verticeCount; ++i)
-				sides[i] = (Dot(vmw, source.vertices[i]) < vmwp);
+			{
+				sides[i] = (vmverts[i] = viewmodel * source.vertices[i]).w > 0.f/*(Dot(vmw, source.vertices[i])  > vmwp)*/;
+			}
 		}
 
 		{

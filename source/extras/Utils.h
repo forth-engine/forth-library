@@ -21,12 +21,14 @@ namespace Forth
 		}
 	}
 
-
-	#define SWAP(a, b, c) c=a;a=b;b=c;
+#define SWAP(a, b, c) \
+	c = a;            \
+	a = b;            \
+	b = c;
 
 #define FORTH_ARRAY(name, T) \
 	T *name = new T[4];      \
-	int name##_cap = 4;        \
+	int name##_cap = 4;      \
 	int name##_count = 0
 
 } // namespace Forth

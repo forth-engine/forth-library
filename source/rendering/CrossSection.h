@@ -10,19 +10,15 @@ namespace Forth
 	class CrossSection : public Projector4
 	{
 
-		Transform4 view, viewmodel;
 		bool *sides = new bool[4];
 		int sides_cap = 4;
+		Vector4 *vmverts = new Vector4[4];
+		int vmverts_cap = 4;
 		Vector4 _temp[4];
-		VertexProfile _temp2[4];
 
 		// Internal separate projection methods
 		void InternalProject1(const Buffer4 &source, Visualizer4 *dest);
-
-		// Internal separate projection methods
 		void InternalProject2(const Buffer4 &source, Visualizer4 *dest);
-
-		// Internal separate projection methods
 		void InternalProject3(const Buffer4 &source, Visualizer4 *dest);
 
 	  public:
@@ -31,14 +27,6 @@ namespace Forth
 		~CrossSection(void)
 		{
 			delete[] sides;
-		}
-
-		/// <summary>
-		/// Called by the viewer to initialize the projction
-		/// </summary>
-		void Setup(const Transform4 &viewer) override
-		{
-			view = Inverse(viewer);
 		}
 
 		/// <summary>
@@ -75,10 +63,10 @@ namespace Forth
 		/// <summary>
 		/// Adapt to simplex requirement for this projection.
 		/// </summary>
-		SimplexMode SimplexModeForVisualizing(SimplexMode mode) const override
+		inline SimplexMode SimplexModeForVisualizing(SimplexMode mode) const override
 		{
 			return (SimplexMode)(mode - 1);
-		};
+		}
 	};
 
 	/// <summary>

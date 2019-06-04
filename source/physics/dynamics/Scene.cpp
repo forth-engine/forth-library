@@ -45,7 +45,7 @@ namespace Forth
 			for (auto body : bodies)
 			{
 				body->SynchronizeProxies();
-				body->force = Vector4::zero();
+				body->force = Vector4::zero;
 				body->torque = Euler4::zero();
 				body->flags &= ~BFL_Island;
 			}

@@ -78,18 +78,6 @@ namespace Forth
 		/// </summary>
 		void AddPoint(int v0);
 
-		void AddPoints(int v...) // recursive variadic function
-		{
-			va_list args;
-			va_start(args, v);
-			for (int i = 0; i < v; i++)
-			{
-				int a = va_arg(args, int);
-				AddPoint(a);
-			}
-			va_end(args);
-		}
-
 		/// <summary>
 		/// Add a segment. Order doesn't matter.
 		/// </summary>

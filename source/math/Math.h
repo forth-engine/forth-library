@@ -103,6 +103,12 @@ namespace Forth
 		return a + (b - a) * t;
 	}
 
+	template <class T>
+	inline T SmoothDamp(T a, T b, T dt)
+	{
+    	return Lerp(a, b, T(1) - std::exp(-dt));
+	}
+
 	inline float Invert(float f)
 	{
 		return 1.f / f;

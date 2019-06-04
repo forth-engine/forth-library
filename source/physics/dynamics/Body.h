@@ -53,12 +53,12 @@ namespace Forth
 			float mass = 0;
 			float invMass = 0;
 
-			Vector4 linearVelocity = Vector4::zero();
+			Vector4 linearVelocity = Vector4::zero;
 			Euler4 angularVelocity = Euler4::zero();
-			Vector4 force = Vector4::zero();
+			Vector4 force = Vector4::zero;
 			Euler4 torque = Euler4::zero();
 			/// Compound transform
-			Transform4 Tx = Transform4::identity();
+			Transform4 Tx = Transform4::identity;
 			/// Local body center
 			Vector4 C = Vector4();
 			/// World body center

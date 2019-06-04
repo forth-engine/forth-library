@@ -27,7 +27,8 @@ namespace Forth
 
 	void SolidVisualizer::End()
 	{
-		RefineTriangleOrder();
+		// Not needed. Much easier to use double-sided shader instead.
+		// RefineTriangleOrder();
 	}
 
 	void SolidVisualizer::RefineTriangleOrder()

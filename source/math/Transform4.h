@@ -22,13 +22,19 @@ namespace Forth
 		/// </summary>
 		Matrix4 rotation;
 
-		Transform4(void) : position(Vector4()), rotation(Matrix4()) {}
+		Transform4(void) : position(), rotation() {}
 
 		/// <summary>
 		/// Create a 4x5 matrix.
 		/// </summary>
 		Transform4(const Vector4 &position, const Matrix4 &rotation)
 			: position(position), rotation(rotation) {}
+
+		/// <summary>
+		/// Create non-orthogonal 4x5 matrix.
+		/// </summary>
+		Transform4(const Vector4 &position, const Matrix4 &rotation, const Vector4 &scale)
+			: position(position), rotation(rotation * Matrix4(scale)) {}
 
 		/// <summary>
 		/// Transforms a point.
@@ -95,11 +101,12 @@ namespace Forth
 				Transpose(t.rotation) * rotation);
 		}
 
-		void operator=(const Transform4 &rhs)
+		Transform4& operator=(const Transform4 &rhs)
 		{
 			// guarantee mutability
 			position = rhs.position;
 			rotation = rhs.rotation;
+			return *this;
 		}
 
 		bool operator==(const Transform4 &t) const
@@ -110,18 +117,24 @@ namespace Forth
 		/// <summary>
 		/// Get a 4x5 identity matrix
 		/// </summary>
-		static Transform4 identity()
-		{
-			return Transform4(Vector4(), Matrix4::identity());
-		}
+		static const Transform4 identity;
 
 		/// <summary> Convert to non-orthogonal matrix by applying a scale </summary>
 		/// <remarks> Do not inverse or multiply any matrix produced using this method. </remarks>
-		Transform4 ToTRS(const Vector4& scale)
+		Transform4 ToTRS(const Vector4 &scale)
 		{
 			return Transform4(position, rotation * Matrix4(scale));
 		}
+
+		inline static Transform4 Position(Vector4 pos) { return Transform4(pos, Matrix4::identity); }
+
+		inline static Transform4 Rotation(Matrix4 rot) { return Transform4(Vector4::zero, rot); }
+
+		inline static Transform4 Scale(Vector4 scl) { return Transform4(Vector4::zero, Matrix4(scl)); }
+
 	};
+
+
 
 	/// <summary>
 	/// Inversely transforms a point.
@@ -139,7 +152,7 @@ namespace Forth
 	/// </summary>
 	inline const Transform4 Inverse(const Transform4 &t)
 	{
-		const Matrix4 &tp = Transpose(t.rotation);
+		const Matrix4 tp = Transpose(t.rotation);
 		return Transform4(tp * (-t.position), tp);
 	}
 

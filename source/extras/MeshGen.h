@@ -2,6 +2,7 @@
 #pragma once
 
 #include "../common/Buffer4.h"
+#include "../math/Transform4.h"
 
 namespace Forth
 {
@@ -147,6 +148,19 @@ namespace Forth
 				input.SequenceGrid(state.subdiv * 2 + 6, state.subdiv + 4, state.subdiv + 4);
 			else
 				input.SequenceGrid(state.subdiv * 2 + 1, state.subdiv + 1, state.subdiv + 1);
+		}
+
+		static void Transform(Buffer4 &input, const Transform4& transform, bool realign = true)
+		{
+			for(int i = input.verticeCount; i-- > input.offset;)
+			{
+				input.vertices[i] = transform * input.vertices[i];
+			}
+
+			if (realign)
+			{
+				input.Align();
+			}
 		}
 	};
 } // namespace Forth

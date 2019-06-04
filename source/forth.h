@@ -4,13 +4,14 @@
 #define FORTH_H
 
 #define FORTH_MAJOR 0
-#define FORTH_MINOR 1
+#define FORTH_MINOR 2
 
 #include "common/Buffer3.h"
 #include "common/Buffer4.h"
 #include "common/BufferGL.h"
 #include "extras/MeshGen.h"
 #include "math/Transform4.h"
+#include "rendering/Frustum4.h"
 #include "rendering/CrossSection.h"
 #include "rendering/Model4.h"
 #include "visualizer/SolidVisualizer.h"

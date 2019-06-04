@@ -173,20 +173,9 @@ namespace Forth
 		/// <summary>
 		/// Get a 4x4 identity matrix
 		/// </summary>
-		static Matrix4 identity(void)
-		{
-			Matrix4 m = Matrix4();
-			m.ex.x = m.ey.y = m.ez.z = m.ew.w = 1;
-			return m;
-		}
+		static const Matrix4 identity;
 
-		/// <summary>
-		/// Get a 4x4 identity matrix
-		/// </summary>
-		static Matrix4 zero(void)
-		{
-			return Matrix4();
-		}
+		static const Matrix4 zero;
 
 	  private:
 		void Transpose(void)

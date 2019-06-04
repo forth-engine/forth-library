@@ -15,35 +15,61 @@
  * @model Model4
  * @vb GLuint to a vertex buffer
 */
-#define FORTH_GL_DRAW(model, vb)                                                                                       \
-	do                                                                                                                 \
-	{                                                                                                                  \
-		glBindBuffer(GL_ARRAY_BUFFER, vb);                                                                             \
-		glBufferData(GL_ARRAY_BUFFER, (model).driver.vb_count * sizeof(float), &(model).driver.vb[0], GL_STREAM_DRAW); \
-		glEnableVertexAttribArray(0);                                                                                  \
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(0));                               \
-		glEnableVertexAttribArray(1);                                                                                  \
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));               \
-		glDrawArrays(GL_TRIANGLES, 0, (model).driver.vb_count / 6);                                                    \
+#define _FORTH_GL_DRAW(dr, vb)                                                           \
+	do                                                                                   \
+	{                                                                                    \
+		glBindBuffer(GL_ARRAY_BUFFER, vb);                                               \
+		glBufferData(GL_ARRAY_BUFFER,                                                    \
+					 dr.vb_count * sizeof(float),                                        \
+					 &dr.vb[0], GL_STREAM_DRAW);                                         \
+		int __f_offsets__ = 0;                                                           \
+		for (int __f_iter__ = 0; __f_iter__ < dr.attr.slots; ++__f_iter__)               \
+		{                                                                                \
+			glEnableVertexAttribArray(__f_iter__);                                       \
+			glVertexAttribPointer(__f_iter__,                                            \
+								  dr.attr.counts[__f_iter__], GL_FLOAT, GL_FALSE,        \
+								  dr.attr.stripe * sizeof(float),                        \
+								  (void *)(__f_offsets__ * sizeof(float)));              \
+			__f_offsets__ += dr.attr.counts[__f_iter__];                                 \
+		}                                                                                \
+		glDrawArrays(dr.attr.simplex == 3 ? GL_TRIANGLES                                 \
+										  : dr.attr.simplex == 2 ? GL_LINES : GL_POINTS, \
+					 0, dr.attr.vertexs);                                                \
 	} while (0)
+
+#define FORTH_GL_DRAW(model, vb) _FORTH_GL_DRAW((model).driver, vb)
 
 namespace Forth
 {
 	class Model4
 	{
+	protected:
+		Transform4 matrix;
+		bool matrix_dirty = true;
+		unsigned long cached_view_version = ULONG_MAX;
+		SphereBounds4 bounds;
+		bool bounds_valid = false;
+
 	  public:
 		Buffer4 input = Buffer4();
 		Buffer3 output = Buffer3();
 		BufferGL driver = BufferGL();
 		Physics::Body *rigidbody = NULL;
-		Transform4 matrix;
 
-		Model4(void) : matrix(Transform4::identity()) {}
+		Model4(void) : matrix(Vector4(), Matrix4(1)) {}
+
+		const Transform4& GetModelMatrix() { return matrix; }
+		void SetModelMatrix(const Transform4& value) { matrix = value; matrix_dirty = true; }
 
 		void Render(Projector4 &projector)
 		{
-			projector.Project(input, matrix, output);
-			this->driver.Copy(output);
+			if (matrix_dirty || cached_view_version != projector.view_version)
+			{
+				projector.Project(input, matrix, output);
+				this->driver.Copy(output);
+				matrix_dirty = false;
+				cached_view_version = projector.view_version;
+			}
 		}
 
 		bool ReadStreamOBJ(std::istream &stream)

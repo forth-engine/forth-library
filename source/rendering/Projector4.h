@@ -16,11 +16,16 @@ namespace Forth
 	/// </summary>
 	class Projector4
 	{
+		friend class Model4;
+		friend class Scene4;
+
+	  protected:
+		Transform4 view, viewmodel;
+		unsigned long view_version = 0;
+
 	  public:
-		/// <summary>
-		/// Called by the viewer to initialize the projction
-		/// </summary>
-		virtual void Setup(const Transform4 &view) = 0;
+		const Transform4& GetViewMatrix() { return view; }
+		void SetViewMatrix(const Transform4& value) { view = value; ++view_version; }
 
 		/// <summary>
 		/// Dynamic projection

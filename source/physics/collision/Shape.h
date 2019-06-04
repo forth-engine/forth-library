@@ -50,7 +50,7 @@ namespace Forth
 
 			float restitution = 0.1f;
 
-			Transform4 local = Transform4::identity();
+			Transform4 local = Transform4::identity;
 
 			virtual bool TestPoint(const Transform4& tx, const Vector4& p) = 0;
 

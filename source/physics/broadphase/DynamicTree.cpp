@@ -120,21 +120,21 @@ namespace Forth
 			// Find the closest leaf
 
 			Vector4 c = Nodes[id].aabb.center();
-			Node &N = Nodes[Root];
+			auto N = &Nodes[Root];
 			int n = Root, r, l, p;
 
-			while (N.height > 0)
+			while (N->height > 0)
 			{
-				Node &R = Nodes[r = N.right];
-				Node &L = Nodes[l = N.left];
+				Node &R = Nodes[r = N->right];
+				Node &L = Nodes[l = N->left];
 				if (Compare(c, L.aabb, R.aabb) >= 0)
 				{
-					N = L;
+					N = &L;
 					n = l;
 				}
 				else
 				{
-					N = R;
+					N = &R;
 					n = r;
 				}
 			}
@@ -143,9 +143,9 @@ namespace Forth
 				Node &P = Nodes[p = AllocateNode()];
 				int tmp;
 				// Make P becomes parent of N and ID
-				SWAP(P.left, N.left, tmp)
-				SWAP(P.right, N.right, tmp)
-				SWAP(P.parent, N.parent, tmp)
+				SWAP(P.left, N->left, tmp)
+				SWAP(P.right, N->right, tmp)
+				SWAP(P.parent, N->parent, tmp)
 
 				// Validate grandparent
 				if (P.parent == -1)
@@ -155,7 +155,7 @@ namespace Forth
 
 				// Validate childs
 				P.Set(id, n);
-				Nodes[id].parent = N.parent = p;
+				Nodes[id].parent = N->parent = p;
 
 				SyncHierarchy(p);
 			}
@@ -202,13 +202,16 @@ namespace Forth
 		}
 		int DynamicTree::AllocateNode()
 		{
-			Node &F = Nodes[FreeNode];
+			Node *F = &Nodes[FreeNode];
 			int f = FreeNode;
 
-			if (F.next == NodesCap)
+			if (F->next == NodesCap)
+			{
 				Resize(NodesCap << 1);
+				F = &Nodes[FreeNode]; // last pointer definitely invalid
+			}
 
-			FreeNode = F.next;
+			FreeNode = F->next;
 			return f;
 		}
 		void DynamicTree::DeallocateNode(int index)

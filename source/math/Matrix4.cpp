@@ -97,7 +97,7 @@ namespace Forth
 	Matrix4 Euler(int axis, float degree)
 	{
 		float s = sin(degree * DEG2RAD), c = cos(degree * DEG2RAD);
-		Matrix4 m = Matrix4::identity();
+		Matrix4 m = Matrix4::identity;
 		// clang-format off
 		switch (axis)
 		{
@@ -111,4 +111,12 @@ namespace Forth
 		}
 		// clang-format on
 	}
+
+		/// <summary>
+		/// Get a 4x4 identity matrix
+		/// </summary>
+		const Matrix4 Matrix4::identity = Matrix4(1);
+
+		const Matrix4 Matrix4::zero = Matrix4();
+
 } // namespace Forth
