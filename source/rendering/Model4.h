@@ -59,7 +59,11 @@ namespace Forth
 		Model4(void) : matrix(Vector4(), Matrix4(1)) {}
 
 		const Transform4& GetModelMatrix() { return matrix; }
-		void SetModelMatrix(const Transform4& value) { matrix = value; matrix_dirty = true; }
+		void SetModelMatrix(const Transform4& value) {
+			matrix = value; matrix_dirty = true;
+			if (rigidbody != NULL)
+				rigidbody->SetTransform(value);
+		}
 
 		void Render(Projector4 &projector)
 		{

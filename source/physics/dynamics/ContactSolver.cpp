@@ -28,8 +28,8 @@ namespace Forth
 
 				float nm = cs.A.m + cs.B.m, dv;
 
-				const Vector4 &vA = velocities[cs.A.index].v, &vB = velocities[cs.B.index].v;
-				const Euler4 &wA = velocities[cs.A.index].w, &wB = velocities[cs.B.index].w;
+				Vector4 &vA = velocities[cs.A.index].v, &vB = velocities[cs.B.index].v;
+				Euler4 &wA = velocities[cs.A.index].w, &wB = velocities[cs.B.index].w;
 
 				for (int j = 0; j < cs.contacts; j++)
 				{
@@ -43,6 +43,7 @@ namespace Forth
 					if ((dv = Dot(vB + Cross(wB, u.rB) - vA - Cross(wA, u.rA), cs.vectors[0])) < -1)
 						u.bias -= cs.restitution * dv;
 
+
 					for (int k = Common::ENABLE_FRICTION ? 4 : 1; k-- > 0;)
 					{
 						// Precalculate vector masses
@@ -53,6 +54,22 @@ namespace Forth
 						u.masses[k] = Invert(tm);
 						u.impulses[k] = 0;
 					}
+
+					// Warm start contact
+					Vector4 P = cs.vectors[0] * u.impulses[0];
+
+					if ( Common::ENABLE_FRICTION )
+					{
+						P += cs.vectors[1] * u.impulses[1];
+						P += cs.vectors[2] * u.impulses[2];
+						P += cs.vectors[3] * u.impulses[3];
+					}
+
+					vA -= P * cs.A.m;
+					wA -= cs.A.i * Cross(u.rA, P );
+
+					vB += P * cs.B.m;
+					wB += cs.B.i * Cross(u.rB, P );
 				}
 			}
 		}

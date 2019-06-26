@@ -8,7 +8,7 @@
 #include "../math/Tensor4.h"
 #include "../math/Transform4.h"
 #include "../math/Vector4.h"
-#include "../math/math.h"
+#include "../math/Math.h"
 #include <algorithm>
 #include <map>
 #include <stack>

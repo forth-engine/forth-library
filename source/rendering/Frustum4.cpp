@@ -369,6 +369,8 @@ namespace Forth
 		case SM_Triangle:
 			InternalProject3(source, dest);
 			break;
+		case SM_Tetrahedron:
+			break;
 		}
 	}
 } // namespace Forth

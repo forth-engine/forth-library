@@ -93,14 +93,6 @@ namespace Forth
 		}
 
 		/// <summary>
-		/// Set Nth-column of the matrix
-		/// </summary>
-		Euler4 &Column(const int i)
-		{
-			return Euler4(ex[i], ey[i], ez[i], et[i], eu[i], ev[i]);
-		}
-
-		/// <summary>
 		/// Transform euler rotation by the tensor.
 		/// </summary>
 		Euler4 operator*(const Euler4 &rhs)

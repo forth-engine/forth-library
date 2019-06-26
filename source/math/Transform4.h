@@ -77,7 +77,7 @@ namespace Forth
 		Bounds4 operator*(const Bounds4 &u) const
 		{
 			Bounds4 b = Bounds4::infinite();
-			Vector4 &e = u.extent(), &c = u.center();
+			const Vector4 &e = u.extent(), &c = u.center();
 			for (float x = -1.f; x <= 1.f; x += 2.f)
 				for (float y = -1.f; y <= 1.f; y += 2.f)
 					for (float z = -1.f; z <= 1.f; z += 2.f)

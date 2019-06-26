@@ -8,7 +8,8 @@ namespace Forth
 	class Scene4
 	{
 	  public:
-		std::vector<Model4> models;
+		std::vector<Model4*> models;
+		Physics::Scene physics;
 
 		Scene4(void);
 		~Scene4();

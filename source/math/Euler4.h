@@ -238,7 +238,7 @@ namespace Forth
 	/// <remarks>
 	/// This method is equivalent to the wedge operation between vector and vector in Geometry Algebra. It is used by internal physics engine.
 	/// </remarks>
-	inline Vector4 Cross(Euler4 a, Vector4 b)
+	inline Vector4 Cross(const Euler4& a, const Vector4& b)
 	{
 		return Vector4(
 			(a.y * b.z) - (a.z * b.y) - (a.t * b.w),
